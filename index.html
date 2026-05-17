@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>CalcHub – Free Construction Calculators</title>
+  <meta name="description" content="Free online construction calculators. Concrete slab, roofing, tile, gravel, paint and more. Instant results, no signup required." />
+  <link rel="canonical" href="https://yourcalculatorsite.com/" />
+
+  <meta property="og:title" content="CalcHub – Free Construction Calculators" />
+  <meta property="og:description" content="Free online construction calculators. Instant results, no signup required." />
+  <meta property="og:type" content="website" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CalcHub",
+    "description": "Free online construction calculators",
+    "url": "https://yourcalculatorsite.com"
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --accent: #f59e0b;
+      --accent2: #fbbf24;
+      --text: #f0f0f0;
+      --muted: #8b90a7;
+      --border: #2e3347;
+      --radius: 14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); text-decoration: none; }
+    .logo span { color: var(--text); }
+    nav ul { list-style: none; display: flex; gap: 24px; }
+    nav ul a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul a:hover { color: var(--text); }
+
+    .hero { text-align: center; padding: 80px 24px 60px; max-width: 720px; margin: 0 auto; }
+    .badge { display: inline-block; background: rgba(245,158,11,0.12); color: var(--accent); border: 1px solid rgba(245,158,11,0.3); padding: 4px 14px; border-radius: 99px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+    h1 { font-family: 'Sora', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+    h1 em { font-style: normal; color: var(--accent); }
+    .hero p { color: var(--muted); font-size: 1.1rem; max-width: 500px; margin: 0 auto 32px; }
+
+    .stats { display: flex; justify-content: center; gap: 40px; margin-bottom: 0; flex-wrap: wrap; }
+    .stat { text-align: center; }
+    .stat .num { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+    .stat .lbl { font-size: 0.8rem; color: var(--muted); }
+
+    .section { max-width: 960px; margin: 60px auto 0; padding: 0 24px; }
+    .section-title { font-family: 'Sora', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 6px; }
+    .section-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 24px; }
+
+    .calc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 60px; }
+    .calc-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-decoration: none; color: var(--text); transition: all 0.2s; display: flex; flex-direction: column; gap: 10px; }
+    .calc-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(245,158,11,0.1); }
+    .calc-card .icon { font-size: 2rem; }
+    .calc-card h3 { font-family: 'Sora', sans-serif; font-size: 1rem; font-weight: 700; }
+    .calc-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.5; flex: 1; }
+    .calc-card .tag { display: inline-block; background: rgba(245,158,11,0.1); color: var(--accent); border-radius: 6px; padding: 2px 10px; font-size: 0.75rem; font-weight: 600; width: fit-content; }
+    .calc-card .tag.soon { background: rgba(139,144,167,0.1); color: var(--muted); }
+
+    .why { max-width: 960px; margin: 0 auto 60px; padding: 0 24px; }
+    .why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+    .why-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .why-item .icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .why-item h4 { font-family: 'Sora', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .why-item p { color: var(--muted); font-size: 0.82rem; line-height: 1.5; }
+
+    footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 28px 24px; color: var(--muted); font-size: 0.85rem; }
+    footer a { color: var(--muted); text-decoration: none; margin: 0 10px; }
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 600px) { nav ul { display: none; } .stats { gap: 24px; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Calc<span>Hub</span></a>
+  <ul>
+    <li><a href="#construction">Construction</a></li>
+    <li><a href="#health">Health</a></li>
+    <li><a href="#finance">Finance</a></li>
+    <li><a href="/about.html">About</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="badge">🧮 Free Online Calculators</div>
+  <h1>Instant <em>Calculators</em><br/>for Every Project</h1>
+  <p>Free, fast, and accurate calculators for construction, health, finance and more. No signup. No ads clutter. Just answers.</p>
+  <div class="stats">
+    <div class="stat"><div class="num">10+</div><div class="lbl">Free Calculators</div></div>
+    <div class="stat"><div class="num">100%</div><div class="lbl">Free Forever</div></div>
+    <div class="stat"><div class="num">0</div><div class="lbl">Signups Needed</div></div>
+  </div>
+</header>
+
+<!-- CONSTRUCTION -->
+<section class="section" id="construction">
+  <h2 class="section-title">🏗️ Construction Calculators</h2>
+  <p class="section-sub">Estimate materials, cost, and quantities for any building project</p>
+  <div class="calc-grid">
+
+    <a href="/concrete-slab-calculator.html" class="calc-card">
+      <div class="icon">🧱</div>
+      <h3>Concrete Slab Calculator</h3>
+      <p>Calculate cubic yards, cubic meters, and number of bags needed for any concrete slab project.</p>
+      <span class="tag">Available now</span>
+    </a>
+
+    <a href="/roofing-calculator.html" class="calc-card">
+      <div class="icon">🏠</div>
+      <h3>Roofing Calculator</h3>
+      <p>Estimate roofing squares, shingle bundles, underlayment rolls, and total material cost.</p>
+      <span class="tag">Available now</span>
+    </a>
+
+    <a href="/tile-calculator.html" class="calc-card">
+      <div class="icon">🟫</div>
+      <h3>Tile Calculator</h3>
+      <p>Find out exactly how many tiles you need for any floor or wall, including wastage.</p>
+      <span class="tag soon">Coming soon</span>
+    </a>
+
+    <a href="/gravel-calculator.html" class="calc-card">
+      <div class="icon">🪨</div>
+      <h3>Gravel Calculator</h3>
+      <p>Calculate tons or cubic yards of gravel, crushed stone, or sand for any area.</p>
+      <span class="tag soon">Coming soon</span>
+    </a>
+
+    <a href="/mulch-calculator.html" class="calc-card">
+      <div class="icon">🌱</div>
+      <h3>Mulch Calculator</h3>
+      <p>Estimate cubic yards of mulch needed to cover garden beds at the right depth.</p>
+      <span class="tag soon">Coming soon</span>
+    </a>
+
+    <a href="/paint-calculator.html" class="calc-card">
+      <div class="icon">🎨</div>
+      <h3>Paint Calculator</h3>
+      <p>Calculate how many gallons or litres of paint you need for any room or surface.</p>
+      <span class="tag soon">Coming soon</span>
+    </a>
+
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why">
+  <h2 class="section-title" style="margin-bottom:6px;">Why Use CalcHub?</h2>
+  <p class="section-sub" style="margin-bottom:24px;">Built for real people doing real projects</p>
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="icon">⚡</div>
+      <h4>Instant Results</h4>
+      <p>No loading, no waiting. Results appear the moment you enter your numbers.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">📱</div>
+      <h4>Works on Any Device</h4>
+      <p>Fully responsive — works perfectly on phone, tablet, or desktop on any job site.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">🎯</div>
+      <h4>Accurate Estimates</h4>
+      <p>Built-in wastage buffers and industry-standard formulas used by professionals.</p>
+    </div>
+    <div class="why-item">
+      <div class="icon">🔒</div>
+      <h4>No Signup Needed</h4>
+      <p>No account, no email, no personal data collected. Just open and calculate.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p style="margin-bottom:10px;">© 2025 CalcHub · Free Online Calculators</p>
+  <div>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="/about.html">About</a>
+    <a href="/contact.html">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
