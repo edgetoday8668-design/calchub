@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Roofing Calculator – Estimate Shingles, Cost & Materials Free</title>
+  <meta name="description" content="Free roofing calculator. Enter your roof dimensions to instantly estimate squares of roofing, number of shingles, felt underlay, and estimated cost. No signup needed." />
+  <link rel="canonical" href="https://yourcalculatorsite.com/construction/roofing-calculator" />
+
+  <meta property="og:title" content="Roofing Calculator – Estimate Shingles & Cost Free" />
+  <meta property="og:description" content="Calculate exactly how many shingles, squares and materials you need for any roof. Free, fast, no signup." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://yourcalculatorsite.com/construction/roofing-calculator" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Roofing Calculator",
+    "description": "Free online calculator to estimate roofing squares, shingles, underlay and material cost for any roof project.",
+    "url": "https://yourcalculatorsite.com/construction/roofing-calculator",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How do I calculate how many shingles I need?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Divide your total roof area by 100 to get roofing squares. Each square requires 3 bundles of standard shingles. Add 10-15% for waste and cutting. Our roofing calculator does this automatically."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a roofing square?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A roofing square equals 100 square feet of roof area. Roofing materials like shingles, felt, and underlayment are sold and measured in squares."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How much does a new roof cost?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A new asphalt shingle roof typically costs $3.50–$5.50 per square foot for materials and $1.50–$3.00 per square foot for labour, totalling $5–$8.50 per square foot installed."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I measure roof pitch?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Roof pitch is expressed as rise over run. A 4/12 pitch means the roof rises 4 inches for every 12 inches of horizontal distance. Common residential pitches range from 4/12 to 8/12."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --accent: #f59e0b;
+      --accent2: #fbbf24;
+      --text: #f0f0f0;
+      --muted: #8b90a7;
+      --border: #2e3347;
+      --green: #22c55e;
+      --radius: 14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.6; }
+    nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+    .logo { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 1.2rem; color: var(--accent); text-decoration: none; }
+    .logo span { color: var(--text); }
+    nav ul { list-style: none; display: flex; gap: 24px; }
+    nav ul a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul a:hover { color: var(--text); }
+    .hero { text-align: center; padding: 60px 24px 40px; max-width: 720px; margin: 0 auto; }
+    .badge { display: inline-block; background: rgba(245,158,11,0.12); color: var(--accent); border: 1px solid rgba(245,158,11,0.3); padding: 4px 14px; border-radius: 99px; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 16px; }
+    h1 { font-family: 'Sora', sans-serif; font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+    h1 em { font-style: normal; color: var(--accent); }
+    .hero p { color: var(--muted); font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+    .main { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; }
+    .card h2 { font-family: 'Sora', sans-serif; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.78rem; margin-bottom: 22px; }
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; font-weight: 500; }
+    .input-wrap { position: relative; display: flex; align-items: center; }
+    input[type="number"] { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 52px 12px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1rem; outline: none; transition: border-color 0.2s; }
+    input[type="number"]:focus { border-color: var(--accent); }
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .unit-label { position: absolute; right: 14px; color: var(--muted); font-size: 0.85rem; pointer-events: none; }
+    select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 1rem; outline: none; cursor: pointer; transition: border-color 0.2s; appearance: none; }
+    select:focus { border-color: var(--accent); }
+    .wastage-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .wastage-row label { margin: 0; }
+    .wastage-row span { color: var(--accent); font-weight: 700; font-size: 0.95rem; }
+    input[type="range"] { width: 100%; accent-color: var(--accent); }
+    .calc-btn { width: 100%; padding: 15px; background: var(--accent); color: #000; border: none; border-radius: 10px; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; margin-top: 4px; }
+    .calc-btn:hover { background: var(--accent2); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(245,158,11,0.25); }
+    .results { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; display: none; }
+    .results.visible { display: block; }
+    .results h2 { font-family: 'Sora', sans-serif; font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; }
+    .result-primary { background: linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.04)); border: 1px solid rgba(245,158,11,0.25); border-radius: 10px; padding: 20px; text-align: center; margin-bottom: 16px; }
+    .result-primary .big { font-family: 'Sora', sans-serif; font-size: 2.6rem; font-weight: 800; color: var(--accent); line-height: 1; }
+    .result-primary .label { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+    .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+    .result-item { background: var(--surface2); border-radius: 8px; padding: 14px; text-align: center; }
+    .result-item .val { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.2rem; color: var(--text); }
+    .result-item .lbl { font-size: 0.78rem; color: var(--muted); margin-top: 3px; }
+    .tip-box { background: rgba(34,197,94,0.08); border: 1px solid rgba(34,197,94,0.2); border-radius: 8px; padding: 12px 14px; font-size: 0.85rem; color: #86efac; display: flex; gap: 8px; align-items: flex-start; }
+    .related { max-width: 900px; margin: 0 auto; padding: 0 24px 24px; }
+    .related h2 { font-family: 'Sora', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 14px; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+    .related-link { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-decoration: none; color: var(--text); font-size: 0.9rem; display: flex; align-items: center; gap: 10px; transition: all 0.2s; }
+    .related-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .seo-content { max-width: 900px; margin: 40px auto 0; padding: 0 24px 60px; }
+    .seo-content h2 { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; margin: 32px 0 12px; }
+    .seo-content h3 { font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 600; margin: 22px 0 8px; color: var(--accent); }
+    .seo-content p { color: var(--muted); font-size: 0.95rem; margin-bottom: 12px; line-height: 1.75; }
+    .seo-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem; }
+    .seo-content th { background: var(--surface2); padding: 10px 14px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
+    .seo-content td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
+    .faq { max-width: 900px; margin: 0 auto; padding: 0 24px 60px; }
+    .faq h2 { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 20px; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    .faq-q { font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .faq-q::after { content: '+'; color: var(--accent); font-size: 1.3rem; flex-shrink: 0; transition: transform 0.2s; }
+    .faq-item.open .faq-q::after { transform: rotate(45deg); }
+    .faq-a { color: var(--muted); font-size: 0.9rem; line-height: 1.75; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s; }
+    .faq-item.open .faq-a { max-height: 300px; padding-top: 12px; }
+    footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 28px 24px; color: var(--muted); font-size: 0.85rem; }
+    footer a { color: var(--muted); text-decoration: none; margin: 0 10px; }
+    footer a:hover { color: var(--text); }
+    @media (max-width: 640px) { .main { grid-template-columns: 1fr; } nav ul { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo">Calc<span>Hub</span></a>
+  <ul>
+    <li><a href="/construction">Construction</a></li>
+    <li><a href="/health">Health</a></li>
+    <li><a href="/finance">Finance</a></li>
+    <li><a href="/about">About</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="badge">🏠 Construction Calculator</div>
+  <h1>Roofing <em>Calculator</em></h1>
+  <p>Instantly estimate roofing squares, shingles, underlayment, and total material cost for any roof. Free, fast, no signup required.</p>
+</header>
+
+<div class="main">
+
+  <div class="card">
+    <h2>Enter Roof Dimensions</h2>
+
+    <div class="field">
+      <label for="length">Roof Length (one side)</label>
+      <div class="input-wrap">
+        <input type="number" id="length" placeholder="e.g. 40" min="0" step="0.5" />
+        <span class="unit-label">ft</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="width">Roof Width (one side)</label>
+      <div class="input-wrap">
+        <input type="number" id="width" placeholder="e.g. 20" min="0" step="0.5" />
+        <span class="unit-label">ft</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="sides">Number of Roof Sides</label>
+      <select id="sides">
+        <option value="2">2 sides (Gable roof)</option>
+        <option value="4">4 sides (Hip roof)</option>
+        <option value="1">1 side (Shed / Lean-to)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="pitch">Roof Pitch</label>
+      <select id="pitch">
+        <option value="1.031">Flat / Low (2/12)</option>
+        <option value="1.054">3/12 pitch</option>
+        <option value="1.083" selected>4/12 pitch (most common)</option>
+        <option value="1.118">5/12 pitch</option>
+        <option value="1.162">6/12 pitch</option>
+        <option value="1.220">7/12 pitch</option>
+        <option value="1.281">8/12 pitch (steep)</option>
+        <option value="1.357">9/12 pitch</option>
+        <option value="1.474">12/12 pitch (very steep)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="price">Shingle Price per Bundle (USD)</label>
+      <div class="input-wrap">
+        <input type="number" id="price" placeholder="e.g. 35" value="35" min="0" step="1" />
+        <span class="unit-label">$</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <div class="wastage-row">
+        <label>Wastage buffer</label>
+        <span id="wastage-val">15%</span>
+      </div>
+      <input type="range" id="wastage" min="5" max="25" value="15" step="1"
+        oninput="document.getElementById('wastage-val').textContent = this.value + '%'" />
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">Calculate Roofing Materials →</button>
+  </div>
+
+  <div class="results" id="results">
+    <h2>Your Results</h2>
+
+    <div class="result-primary">
+      <div class="big" id="res-squares">—</div>
+      <div class="label">roofing squares needed</div>
+    </div>
+
+    <div class="result-grid">
+      <div class="result-item">
+        <div class="val" id="res-bundles">—</div>
+        <div class="lbl">Shingle bundles</div>
+      </div>
+      <div class="result-item">
+        <div class="val" id="res-sqft">—</div>
+        <div class="lbl">Total sq ft</div>
+      </div>
+      <div class="result-item">
+        <div class="val" id="res-felt">—</div>
+        <div class="lbl">Felt rolls needed</div>
+      </div>
+      <div class="result-item">
+        <div class="val" id="res-cost">—</div>
+        <div class="lbl">Est. material cost</div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span>💡</span>
+      <span id="tip-text">Always buy extra bundles — leftover shingles are useful for future repairs.</span>
+    </div>
+  </div>
+
+</div>
+
+<section class="related">
+  <h2>More Construction Calculators</h2>
+  <div class="related-grid">
+    <a href="/construction/concrete-slab-calculator" class="related-link">
+      <span>🧱</span> Concrete Slab
+    </a>
+    <a href="/construction/tile-calculator" class="related-link">
+      <span>🟫</span> Tile Calculator
+    </a>
+    <a href="/construction/gravel-calculator" class="related-link">
+      <span>🪨</span> Gravel Calculator
+    </a>
+    <a href="/construction/mulch-calculator" class="related-link">
+      <span>🌱</span> Mulch Calculator
+    </a>
+    <a href="/construction/paint-calculator" class="related-link">
+      <span>🎨</span> Paint Calculator
+    </a>
+    <a href="/construction/concrete-footing-calculator" class="related-link">
+      <span>🔩</span> Footing Calculator
+    </a>
+  </div>
+</section>
+
+<article class="seo-content">
+  <h2>How to Calculate Roofing Materials</h2>
+  <p>Estimating roofing materials accurately prevents costly over-ordering or frustrating shortages mid-project. Our free roofing calculator accounts for roof pitch, number of sides, and a wastage buffer to give you a realistic material estimate.</p>
+
+  <h3>What is a Roofing Square?</h3>
+  <p>A roofing square equals 100 square feet of roof surface. All roofing materials — shingles, felt underlayment, ice barrier — are sold and priced by the square. Most standard asphalt shingle bundles cover approximately 33 square feet, meaning you need 3 bundles per square.</p>
+
+  <h3>Why Roof Pitch Matters</h3>
+  <p>A steeper roof has more actual surface area than its footprint suggests. A flat 4/12 pitch roof covering a 40×20 ft footprint has significantly more surface area than a flat ceiling of the same size. Our calculator applies the correct pitch multiplier automatically.</p>
+
+  <h3>Common Roof Pitch Reference</h3>
+  <table>
+    <thead>
+      <tr><th>Pitch</th><th>Description</th><th>Pitch Multiplier</th><th>Common Use</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>2/12</td><td>Nearly flat</td><td>1.03</td><td>Commercial buildings</td></tr>
+      <tr><td>4/12</td><td>Low slope</td><td>1.08</td><td>Most common residential</td></tr>
+      <tr><td>6/12</td><td>Medium slope</td><td>1.16</td><td>Traditional homes</td></tr>
+      <tr><td>8/12</td><td>Steep</td><td>1.28</td><td>Cape cod style</td></tr>
+      <tr><td>12/12</td><td>Very steep</td><td>1.41</td><td>Victorian / steep gables</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Types of Roofing Shingles</h3>
+  <p>Asphalt shingles are the most common and affordable option, lasting 20–30 years. Architectural (dimensional) shingles cost more but last longer and look better. Metal roofing lasts 40–70 years but has higher upfront cost. Always confirm shingle type with your supplier before ordering.</p>
+
+  <h3>Don't Forget Underlayment</h3>
+  <p>Roofing felt (underlayment) is installed beneath shingles to provide a moisture barrier. Standard 15 lb felt rolls cover approximately 400 square feet per roll. Heavier 30 lb felt provides better protection in high-wind or high-rainfall areas.</p>
+</article>
+
+<section class="faq">
+  <h2>Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How do I calculate how many shingles I need?</div>
+    <div class="faq-a">Divide your total roof area by 100 to get roofing squares. Each square needs 3 bundles of standard shingles. Add 10–15% for waste from cutting around edges, valleys, and ridges. Our calculator handles all of this automatically.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">What is a roofing square?</div>
+    <div class="faq-a">A roofing square equals exactly 100 square feet of roof surface area. It is the standard unit used by roofers and material suppliers to measure and price roofing jobs. Three standard bundles of asphalt shingles cover one roofing square.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How much does a new roof cost?</div>
+    <div class="faq-a">Material costs for asphalt shingles average $1.50–$3.00 per square foot. Labour adds another $1.50–$3.00 per square foot. Total installed cost typically ranges $5–$8.50 per square foot depending on pitch, location, and roofing type.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How do I measure my roof pitch?</div>
+    <div class="faq-a">Roof pitch is the rise over 12 inches of run. Use a level and tape measure: place the level horizontally against the roof, measure 12 inches along it, then measure the vertical rise from that point to the roof surface. A 4-inch rise = 4/12 pitch.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q" onclick="toggleFaq(this)">How much wastage should I add for roofing?</div>
+    <div class="faq-a">Add 10% for simple gable roofs with few cuts. Add 15% for roofs with hips, valleys, or skylights. Add up to 20% for complex roofs with multiple angles and dormers. It is always cheaper to return unused materials than to make an emergency run mid-project.</div>
+  </div>
+</section>
+
+<footer>
+  <p style="margin-bottom:10px;">© 2025 CalcHub · Free Online Calculators</p>
+  <div>
+    <a href="/privacy-policy">Privacy Policy</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    <a href="/construction">Construction Calculators</a>
+  </div>
+</footer>
+
+<script>
+  function calculate() {
+    const length = parseFloat(document.getElementById('length').value);
+    const width = parseFloat(document.getElementById('width').value);
+    const sides = parseFloat(document.getElementById('sides').value);
+    const pitch = parseFloat(document.getElementById('pitch').value);
+    const price = parseFloat(document.getElementById('price').value) || 35;
+    const wastage = 1 + parseFloat(document.getElementById('wastage').value) / 100;
+
+    if (!length || !width || length <= 0 || width <= 0) {
+      alert('Please enter valid roof dimensions.');
+      return;
+    }
+
+    const baseArea = length * width * sides;
+    const pitchedArea = baseArea * pitch * wastage;
+    const squares = pitchedArea / 100;
+    const bundles = Math.ceil(squares * 3);
+    const feltRolls = Math.ceil(pitchedArea / 400);
+    const materialCost = bundles * price;
+
+    document.getElementById('res-squares').textContent = squares.toFixed(1);
+    document.getElementById('res-bundles').textContent = bundles.toLocaleString();
+    document.getElementById('res-sqft').textContent = Math.round(pitchedArea).toLocaleString() + ' ft²';
+    document.getElementById('res-felt').textContent = feltRolls + ' rolls';
+    document.getElementById('res-cost').textContent = '$' + materialCost.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
+
+    let tip = '';
+    if (squares < 10) {
+      tip = 'Small roof — this is a manageable DIY project. Rent a nail gun to save time.';
+    } else if (squares < 25) {
+      tip = 'Medium roof — consider hiring a professional. Labour typically costs as much as materials.';
+    } else {
+      tip = 'Large roof — always get at least 3 contractor quotes. Prices vary significantly by region.';
+    }
+    document.getElementById('tip-text').textContent = tip;
+
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function toggleFaq(el) {
+    el.parentElement.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>
