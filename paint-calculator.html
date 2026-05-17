@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paint Calculator – How Much Paint Do I Need? Free Tool</title>
+  <meta name="description" content="Free paint calculator. Enter room dimensions to calculate exactly how many gallons of paint you need for walls, ceilings, and trim. Instant results, free." />
+  <link rel="canonical" href="https://yourcalculatorsite.com/paint-calculator" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Paint Calculator","description":"Free online calculator to estimate gallons of paint needed for any room.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much paint do I need for a 12x12 room?","acceptedAnswer":{"@type":"Answer","text":"A 12×12 room with 8 ft ceilings has about 320 sq ft of wall space. At 350 sq ft per gallon coverage, you need roughly 1 gallon for one coat or 2 gallons for two coats. Our paint calculator gives exact results."}},{"@type":"Question","name":"How many square feet does a gallon of paint cover?","acceptedAnswer":{"@type":"Answer","text":"A gallon of paint typically covers 350–400 square feet with one coat on a smooth surface. Rough or porous surfaces may only get 250–300 sq ft per gallon. Always check the label for exact coverage."}},{"@type":"Question","name":"How many coats of paint do I need?","acceptedAnswer":{"@type":"Answer","text":"Two coats are recommended for most painting jobs, especially when changing colours or painting over dark colours. One coat may suffice when using paint-and-primer combinations on already-painted surfaces."}}]}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--accent:#f59e0b;--accent2:#fbbf24;--text:#f0f0f0;--muted:#8b90a7;--border:#2e3347;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;color:var(--accent);text-decoration:none}
+    .logo span{color:var(--text)}
+    nav ul{list-style:none;display:flex;gap:24px}
+    nav ul a{color:var(--muted);text-decoration:none;font-size:.9rem}
+    nav ul a:hover{color:var(--text)}
+    .hero{text-align:center;padding:60px 24px 40px;max-width:720px;margin:0 auto}
+    .badge{display:inline-block;background:rgba(245,158,11,.12);color:var(--accent);border:1px solid rgba(245,158,11,.3);padding:4px 14px;border-radius:99px;font-size:.78rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px}
+    h1{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:14px}
+    h1 em{font-style:normal;color:var(--accent)}
+    .hero p{color:var(--muted);font-size:1.05rem;max-width:520px;margin:0 auto}
+    .main{max-width:900px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+    .card h2{font-family:'Sora',sans-serif;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;margin-bottom:22px}
+    .field{margin-bottom:18px}
+    label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;font-weight:500}
+    .input-wrap{position:relative;display:flex;align-items:center}
+    input[type=number]{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 52px 12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color .2s}
+    input[type=number]:focus{border-color:var(--accent)}
+    input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+    .unit-label{position:absolute;right:14px;color:var(--muted);font-size:.85rem;pointer-events:none}
+    select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;cursor:pointer;appearance:none}
+    select:focus{border-color:var(--accent)}
+    .toggle-row{display:flex;gap:8px;margin-bottom:18px}
+    .toggle-btn{flex:1;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;transition:all .2s;text-align:center}
+    .toggle-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,158,11,.08)}
+    .calc-btn{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;margin-top:4px}
+    .calc-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.25)}
+    .results{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:none}
+    .results.visible{display:block}
+    .results h2{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    .result-primary{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:20px;text-align:center;margin-bottom:16px}
+    .result-primary .big{font-family:'Sora',sans-serif;font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1}
+    .result-primary .label{color:var(--muted);font-size:.85rem;margin-top:4px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .result-item{background:var(--surface2);border-radius:8px;padding:14px;text-align:center}
+    .result-item .val{font-family:'Sora',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text)}
+    .result-item .lbl{font-size:.78rem;color:var(--muted);margin-top:3px}
+    .tip-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px 14px;font-size:.85rem;color:#86efac;display:flex;gap:8px}
+    .related{max-width:900px;margin:0 auto;padding:0 24px 24px}
+    .related h2{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:14px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+    .related-link{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);font-size:.9rem;display:flex;align-items:center;gap:10px;transition:all .2s}
+    .related-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+    .seo-content{max-width:900px;margin:40px auto 0;padding:0 24px 60px}
+    .seo-content h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;margin:32px 0 12px}
+    .seo-content h3{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:600;margin:22px 0 8px;color:var(--accent)}
+    .seo-content p{color:var(--muted);font-size:.95rem;margin-bottom:12px;line-height:1.75}
+    .seo-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+    .seo-content th{background:var(--surface2);padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border)}
+    .seo-content td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+    .faq{max-width:900px;margin:0 auto;padding:0 24px 60px}
+    .faq h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:20px}
+    .faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+    .faq-q{font-weight:600;font-size:.95rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .faq-q::after{content:'+';color:var(--accent);font-size:1.3rem;flex-shrink:0;transition:transform .2s}
+    .faq-item.open .faq-q::after{transform:rotate(45deg)}
+    .faq-a{color:var(--muted);font-size:.9rem;line-height:1.75;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+    .faq-item.open .faq-a{max-height:300px;padding-top:12px}
+    footer{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:28px 24px;color:var(--muted);font-size:.85rem}
+    footer a{color:var(--muted);text-decoration:none;margin:0 10px}
+    footer a:hover{color:var(--text)}
+    @media(max-width:640px){.main{grid-template-columns:1fr}nav ul{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="logo">Calc<span>Hub</span></a>
+  <ul><li><a href="/index.html#construction">Construction</a></li><li><a href="/about.html">About</a></li></ul>
+</nav>
+<header class="hero">
+  <div class="badge">🎨 Home Improvement Calculator</div>
+  <h1>Paint <em>Calculator</em></h1>
+  <p>Calculate exactly how many gallons of paint you need for any room. Walls, ceiling, trim — all covered. Free, instant, no signup.</p>
+</header>
+<div class="main">
+  <div class="card">
+    <h2>Enter Room Dimensions</h2>
+    <div class="field"><label>Room Length</label><div class="input-wrap"><input type="number" id="rlen" placeholder="e.g. 12" min="0" step="0.5"/><span class="unit-label">ft</span></div></div>
+    <div class="field"><label>Room Width</label><div class="input-wrap"><input type="number" id="rwid" placeholder="e.g. 10" min="0" step="0.5"/><span class="unit-label">ft</span></div></div>
+    <div class="field"><label>Ceiling Height</label><div class="input-wrap"><input type="number" id="rheight" placeholder="e.g. 8" min="0" step="0.5"/><span class="unit-label">ft</span></div></div>
+    <div class="field"><label>Number of Doors</label><div class="input-wrap"><input type="number" id="doors" placeholder="e.g. 1" min="0" step="1" value="1"/><span class="unit-label">doors</span></div></div>
+    <div class="field"><label>Number of Windows</label><div class="input-wrap"><input type="number" id="windows" placeholder="e.g. 2" min="0" step="1" value="2"/><span class="unit-label">windows</span></div></div>
+    <div class="field"><label>Number of Coats</label>
+      <select id="coats">
+        <option value="1">1 coat</option>
+        <option value="2" selected>2 coats (recommended)</option>
+        <option value="3">3 coats (dark colour change)</option>
+      </select>
+    </div>
+    <div class="field"><label>What are you painting?</label>
+      <div class="toggle-row">
+        <div class="toggle-btn active" onclick="toggleSurface(this,'walls')">Walls</div>
+        <div class="toggle-btn" onclick="toggleSurface(this,'ceiling')">+ Ceiling</div>
+        <div class="toggle-btn" onclick="toggleSurface(this,'trim')">+ Trim</div>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Paint Needed →</button>
+  </div>
+  <div class="results" id="results">
+    <h2>Your Results</h2>
+    <div class="result-primary"><div class="big" id="res-gallons">—</div><div class="label">gallons of wall paint needed</div></div>
+    <div class="result-grid">
+      <div class="result-item"><div class="val" id="res-wallarea">—</div><div class="lbl">Wall area</div></div>
+      <div class="result-item"><div class="val" id="res-ceiling">—</div><div class="lbl">Ceiling paint</div></div>
+      <div class="result-item"><div class="val" id="res-quarts">—</div><div class="lbl">Or in quarts</div></div>
+      <div class="result-item"><div class="val" id="res-trim">—</div><div class="lbl">Trim paint</div></div>
+    </div>
+    <div class="tip-box"><span>💡</span><span id="tip-text">Buy one extra quart as backup — paint batches can vary slightly in colour between purchases.</span></div>
+  </div>
+</div>
+<section class="related">
+  <h2>More Construction Calculators</h2>
+  <div class="related-grid">
+    <a href="/concrete-slab-calculator.html" class="related-link"><span>🧱</span> Concrete Slab</a>
+    <a href="/tile-calculator.html" class="related-link"><span>🟫</span> Tile</a>
+    <a href="/roofing-calculator.html" class="related-link"><span>🏠</span> Roofing</a>
+    <a href="/gravel-calculator.html" class="related-link"><span>🪨</span> Gravel</a>
+    <a href="/mulch-calculator.html" class="related-link"><span>🌱</span> Mulch</a>
+  </div>
+</section>
+<article class="seo-content">
+  <h2>How to Calculate How Much Paint You Need</h2>
+  <p>Running out of paint mid-project or buying too much both waste money. The key is calculating your wall area accurately, subtracting doors and windows, then multiplying by number of coats.</p>
+  <h3>Paint Coverage Guide</h3>
+  <table>
+    <thead><tr><th>Surface Type</th><th>Coverage per Gallon</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Smooth drywall</td><td>350–400 sq ft</td><td>Best coverage</td></tr>
+      <tr><td>Previously painted wall</td><td>300–350 sq ft</td><td>Good coverage</td></tr>
+      <tr><td>Rough or textured wall</td><td>250–300 sq ft</td><td>More paint absorbed</td></tr>
+      <tr><td>Bare wood or primer coat</td><td>200–300 sq ft</td><td>Highly absorbent</td></tr>
+      <tr><td>Ceiling paint</td><td>300–350 sq ft</td><td>Thicker formula</td></tr>
+    </tbody>
+  </table>
+  <h3>One Coat vs Two Coats</h3>
+  <p>Two coats are almost always worth it — they provide better colour depth, durability, and even coverage. One coat may be enough when using paint-and-primer combinations on already-painted surfaces in similar colours. Going from light to dark or dark to light always needs two coats minimum.</p>
+</article>
+<section class="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How much paint do I need for a 12x12 room?</div><div class="faq-a">A 12×12 room with 8 ft ceilings has approximately 320 sq ft of wall area (minus doors and windows, roughly 280 net sq ft). At 350 sq ft per gallon, you need about 1 gallon per coat — 2 gallons total for two coats.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many square feet does a gallon of paint cover?</div><div class="faq-a">A gallon typically covers 350–400 sq ft on smooth surfaces with one coat. Textured, rough, or porous surfaces reduce this to 250–300 sq ft. Always check the specific product label for actual coverage rates.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Should I paint the ceiling the same colour as the walls?</div><div class="faq-a">Painting ceilings the same colour as walls creates a cocooning effect that makes rooms feel intimate and modern. Traditional white ceilings make rooms feel taller and brighter. Either way, use ceiling-specific paint for better coverage and a flat finish that hides imperfections.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the difference between paint finishes?</div><div class="faq-a">Flat/matte finish hides imperfections best — ideal for ceilings and low-traffic walls. Eggshell and satin are wipeable — good for living rooms and bedrooms. Semi-gloss and gloss are durable and moisture-resistant — ideal for trim, kitchens, and bathrooms.</div></div>
+</section>
+<footer>
+  <p style="margin-bottom:10px;">© 2025 CalcHub · Free Online Calculators</p>
+  <div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div>
+</footer>
+<script>
+  let surfaces={walls:true,ceiling:false,trim:false};
+  function toggleSurface(btn,surface){
+    if(surface==='walls')return;
+    surfaces[surface]=!surfaces[surface];
+    btn.classList.toggle('active');
+  }
+  function calculate(){
+    const rl=parseFloat(document.getElementById('rlen').value);
+    const rw=parseFloat(document.getElementById('rwid').value);
+    const rh=parseFloat(document.getElementById('rheight').value);
+    const doors=parseFloat(document.getElementById('doors').value)||0;
+    const windows=parseFloat(document.getElementById('windows').value)||0;
+    const coats=parseFloat(document.getElementById('coats').value);
+    if(!rl||!rw||!rh||rl<=0||rw<=0||rh<=0){alert('Please enter valid room dimensions.');return;}
+    const wallArea=2*(rl+rw)*rh;
+    const doorArea=doors*21;
+    const windowArea=windows*15;
+    const netWallArea=Math.max(0,wallArea-doorArea-windowArea);
+    const ceilingArea=rl*rw;
+    const trimArea=(2*(rl+rw)*0.5)+(doors*20);
+    const wallGallons=Math.ceil((netWallArea*coats)/350*10)/10;
+    const ceilingGallons=surfaces.ceiling?Math.ceil((ceilingArea*coats)/350*10)/10:0;
+    const trimGallons=surfaces.trim?Math.ceil((trimArea*coats)/400*10)/10:0;
+    const wallQuarts=Math.ceil(wallGallons*4);
+    document.getElementById('res-gallons').textContent=wallGallons.toFixed(1);
+    document.getElementById('res-wallarea').textContent=netWallArea.toFixed(0)+' ft²';
+    document.getElementById('res-ceiling').textContent=surfaces.ceiling?ceilingGallons.toFixed(1)+' gal':'Not selected';
+    document.getElementById('res-quarts').textContent=wallQuarts+' qts';
+    document.getElementById('res-trim').textContent=surfaces.trim?trimGallons.toFixed(1)+' gal':'Not selected';
+    let tip='';
+    if(coats===1)tip='Consider 2 coats for better durability and richer colour depth.';
+    else if(wallGallons<=1)tip='Under 1 gallon needed — buy a quart for touch-ups and store it for future repairs.';
+    else tip='Buy one extra quart as backup — paint batches vary slightly between store visits.';
+    document.getElementById('tip-text').textContent=tip;
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function toggleFaq(el){el.parentElement.classList.toggle('open');}
+</script>
+</body>
+</html>

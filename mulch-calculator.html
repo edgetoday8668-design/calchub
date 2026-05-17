@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mulch Calculator – How Many Cubic Yards of Mulch Do I Need?</title>
+  <meta name="description" content="Free mulch calculator. Enter garden bed dimensions and mulch depth to instantly calculate cubic yards or bags of mulch needed. Free, no signup required." />
+  <link rel="canonical" href="https://yourcalculatorsite.com/mulch-calculator" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Mulch Calculator","description":"Free online calculator to estimate cubic yards or bags of mulch needed for any garden bed.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--accent:#f59e0b;--accent2:#fbbf24;--text:#f0f0f0;--muted:#8b90a7;--border:#2e3347;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;color:var(--accent);text-decoration:none}
+    .logo span{color:var(--text)}
+    nav ul{list-style:none;display:flex;gap:24px}
+    nav ul a{color:var(--muted);text-decoration:none;font-size:.9rem}
+    nav ul a:hover{color:var(--text)}
+    .hero{text-align:center;padding:60px 24px 40px;max-width:720px;margin:0 auto}
+    .badge{display:inline-block;background:rgba(245,158,11,.12);color:var(--accent);border:1px solid rgba(245,158,11,.3);padding:4px 14px;border-radius:99px;font-size:.78rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px}
+    h1{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:14px}
+    h1 em{font-style:normal;color:var(--accent)}
+    .hero p{color:var(--muted);font-size:1.05rem;max-width:520px;margin:0 auto}
+    .main{max-width:900px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+    .card h2{font-family:'Sora',sans-serif;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;margin-bottom:22px}
+    .field{margin-bottom:18px}
+    label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;font-weight:500}
+    .input-wrap{position:relative;display:flex;align-items:center}
+    input[type=number]{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 52px 12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color .2s}
+    input[type=number]:focus{border-color:var(--accent)}
+    input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+    .unit-label{position:absolute;right:14px;color:var(--muted);font-size:.85rem;pointer-events:none}
+    select{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;cursor:pointer;appearance:none}
+    select:focus{border-color:var(--accent)}
+    .calc-btn{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;margin-top:4px}
+    .calc-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.25)}
+    .results{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:none}
+    .results.visible{display:block}
+    .results h2{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    .result-primary{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:20px;text-align:center;margin-bottom:16px}
+    .result-primary .big{font-family:'Sora',sans-serif;font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1}
+    .result-primary .label{color:var(--muted);font-size:.85rem;margin-top:4px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .result-item{background:var(--surface2);border-radius:8px;padding:14px;text-align:center}
+    .result-item .val{font-family:'Sora',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text)}
+    .result-item .lbl{font-size:.78rem;color:var(--muted);margin-top:3px}
+    .tip-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px 14px;font-size:.85rem;color:#86efac;display:flex;gap:8px}
+    .related{max-width:900px;margin:0 auto;padding:0 24px 24px}
+    .related h2{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:14px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+    .related-link{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);font-size:.9rem;display:flex;align-items:center;gap:10px;transition:all .2s}
+    .related-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+    .seo-content{max-width:900px;margin:40px auto 0;padding:0 24px 60px}
+    .seo-content h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;margin:32px 0 12px}
+    .seo-content h3{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:600;margin:22px 0 8px;color:var(--accent)}
+    .seo-content p{color:var(--muted);font-size:.95rem;margin-bottom:12px;line-height:1.75}
+    .seo-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+    .seo-content th{background:var(--surface2);padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border)}
+    .seo-content td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+    .faq{max-width:900px;margin:0 auto;padding:0 24px 60px}
+    .faq h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:20px}
+    .faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+    .faq-q{font-weight:600;font-size:.95rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .faq-q::after{content:'+';color:var(--accent);font-size:1.3rem;flex-shrink:0;transition:transform .2s}
+    .faq-item.open .faq-q::after{transform:rotate(45deg)}
+    .faq-a{color:var(--muted);font-size:.9rem;line-height:1.75;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+    .faq-item.open .faq-a{max-height:300px;padding-top:12px}
+    footer{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:28px 24px;color:var(--muted);font-size:.85rem}
+    footer a{color:var(--muted);text-decoration:none;margin:0 10px}
+    footer a:hover{color:var(--text)}
+    @media(max-width:640px){.main{grid-template-columns:1fr}nav ul{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="logo">Calc<span>Hub</span></a>
+  <ul><li><a href="/index.html#construction">Construction</a></li><li><a href="/about.html">About</a></li></ul>
+</nav>
+<header class="hero">
+  <div class="badge">🌱 Landscaping Calculator</div>
+  <h1>Mulch <em>Calculator</em></h1>
+  <p>Calculate exactly how many cubic yards or bags of mulch you need for any garden bed. Free, instant, no signup required.</p>
+</header>
+<div class="main">
+  <div class="card">
+    <h2>Enter Garden Bed Dimensions</h2>
+    <div class="field"><label>Length</label><div class="input-wrap"><input type="number" id="len" placeholder="e.g. 20" min="0" step="0.5"/><span class="unit-label">ft</span></div></div>
+    <div class="field"><label>Width</label><div class="input-wrap"><input type="number" id="wid" placeholder="e.g. 6" min="0" step="0.5"/><span class="unit-label">ft</span></div></div>
+    <div class="field"><label>Desired Mulch Depth</label>
+      <select id="depth">
+        <option value="2">2 inches (light topdress)</option>
+        <option value="3" selected>3 inches (recommended)</option>
+        <option value="4">4 inches (heavy weed barrier)</option>
+        <option value="6">6 inches (maximum)</option>
+      </select>
+    </div>
+    <div class="field"><label>Mulch Type</label>
+      <select id="type">
+        <option value="wood">Wood chips / Shredded bark</option>
+        <option value="rubber">Rubber mulch</option>
+        <option value="straw">Straw / Pine needles</option>
+        <option value="stone">Decorative stone mulch</option>
+      </select>
+    </div>
+    <div class="field"><label>Price per Cubic Yard (optional)</label><div class="input-wrap"><input type="number" id="price" placeholder="e.g. 35" min="0" step="1"/><span class="unit-label">$</span></div></div>
+    <button class="calc-btn" onclick="calculate()">Calculate Mulch Needed →</button>
+  </div>
+  <div class="results" id="results">
+    <h2>Your Results</h2>
+    <div class="result-primary"><div class="big" id="res-yards">—</div><div class="label">cubic yards needed</div></div>
+    <div class="result-grid">
+      <div class="result-item"><div class="val" id="res-bags">—</div><div class="lbl">2 cu ft bags</div></div>
+      <div class="result-item"><div class="val" id="res-area">—</div><div class="lbl">Area covered</div></div>
+      <div class="result-item"><div class="val" id="res-truckloads">—</div><div class="lbl">Truck loads</div></div>
+      <div class="result-item"><div class="val" id="res-cost">—</div><div class="lbl">Est. cost</div></div>
+    </div>
+    <div class="tip-box"><span>💡</span><span id="tip-text">Apply mulch in spring after soil warms up for best weed suppression results.</span></div>
+  </div>
+</div>
+<section class="related">
+  <h2>More Construction Calculators</h2>
+  <div class="related-grid">
+    <a href="/concrete-slab-calculator.html" class="related-link"><span>🧱</span> Concrete Slab</a>
+    <a href="/gravel-calculator.html" class="related-link"><span>🪨</span> Gravel</a>
+    <a href="/tile-calculator.html" class="related-link"><span>🟫</span> Tile</a>
+    <a href="/paint-calculator.html" class="related-link"><span>🎨</span> Paint</a>
+    <a href="/roofing-calculator.html" class="related-link"><span>🏠</span> Roofing</a>
+  </div>
+</section>
+<article class="seo-content">
+  <h2>How Much Mulch Do I Need?</h2>
+  <p>Mulch is one of the most cost-effective ways to improve your garden — it retains moisture, suppresses weeds, and regulates soil temperature. Getting the right amount prevents waste and ensures proper coverage.</p>
+  <h3>Recommended Mulch Depth</h3>
+  <table>
+    <thead><tr><th>Purpose</th><th>Depth</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Light topdressing</td><td>1–2 inches</td><td>Refreshing existing mulch</td></tr>
+      <tr><td>Standard garden bed</td><td>3 inches</td><td>Best balance of benefits</td></tr>
+      <tr><td>Weed suppression</td><td>4 inches</td><td>Keep away from plant stems</td></tr>
+      <tr><td>Tree rings</td><td>3–4 inches</td><td>Keep 6 inches clear of trunk</td></tr>
+      <tr><td>Playground safety</td><td>6–12 inches</td><td>Use rubber or wood chips</td></tr>
+    </tbody>
+  </table>
+  <h3>Bulk vs Bagged Mulch</h3>
+  <p>For areas under 2 cubic yards, bagged mulch from a hardware store is convenient. For larger projects, bulk mulch delivered by the cubic yard is significantly cheaper — often 50% less per cubic yard than bagged. A standard pickup truck holds about 2 cubic yards of mulch.</p>
+</article>
+<section class="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many bags of mulch do I need for a cubic yard?</div><div class="faq-a">One cubic yard equals 27 cubic feet. Standard bagged mulch comes in 2 cubic foot bags, so you need approximately 13–14 bags per cubic yard. Some bags are 3 cubic feet, requiring about 9 bags per cubic yard.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How deep should mulch be?</div><div class="faq-a">3 inches is the ideal depth for most garden beds — deep enough to suppress weeds and retain moisture, but not so deep it starves plant roots of oxygen. Never pile mulch against tree trunks or plant stems.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How often should I replace mulch?</div><div class="faq-a">Organic mulch like wood chips decomposes over 1–2 years and should be topped up annually. Add 1–2 inches each spring rather than replacing entirely, as decomposed mulch improves soil quality.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the best type of mulch for gardens?</div><div class="faq-a">Shredded hardwood bark is the most popular all-purpose mulch. Cedar mulch naturally repels insects. Pine bark is great for acid-loving plants. Rubber mulch lasts longest but doesn't improve soil. Straw is best for vegetable gardens.</div></div>
+</section>
+<footer>
+  <p style="margin-bottom:10px;">© 2025 CalcHub · Free Online Calculators</p>
+  <div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div>
+</footer>
+<script>
+  function calculate(){
+    const l=parseFloat(document.getElementById('len').value);
+    const w=parseFloat(document.getElementById('wid').value);
+    const d=parseFloat(document.getElementById('depth').value);
+    const price=parseFloat(document.getElementById('price').value)||0;
+    if(!l||!w||l<=0||w<=0){alert('Please enter valid dimensions.');return;}
+    const cubicFt=l*w*(d/12);
+    const cubicYards=cubicFt/27;
+    const bags2cf=Math.ceil(cubicFt/2);
+    const truckLoads=(cubicYards/2).toFixed(1);
+    const cost=price>0?'$'+(cubicYards*price).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:0}):'N/A';
+    document.getElementById('res-yards').textContent=cubicYards.toFixed(2);
+    document.getElementById('res-bags').textContent=bags2cf+' bags';
+    document.getElementById('res-area').textContent=(l*w).toFixed(0)+' ft²';
+    document.getElementById('res-truckloads').textContent=truckLoads+' loads';
+    document.getElementById('res-cost').textContent=cost;
+    let tip='';
+    if(cubicYards<2)tip='Under 2 cubic yards — bagged mulch is most convenient for this size.';
+    else if(cubicYards<5)tip='2–5 cubic yards — consider bulk delivery, it\'s typically 40–50% cheaper than bags.';
+    else tip='Large project — bulk delivery is the way to go. Ask about delivery minimums.';
+    document.getElementById('tip-text').textContent=tip;
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function toggleFaq(el){el.parentElement.classList.toggle('open');}
+</script>
+</body>
+</html>
