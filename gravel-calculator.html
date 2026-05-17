@@ -165,7 +165,7 @@
     const cubicFt=l*w*(d/12);
     const cubicYards=cubicFt/27;
     const tons=cubicYards*density;
-    const bags=Math.ceil((cubicYards*27*density*2000)/50);
+    const bags=Math.ceil((cubicYards*density*2000)/50);
     const cost=price>0?'$'+(tons*price).toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:0}):'N/A';
     document.getElementById('res-yards').textContent=cubicYards.toFixed(2);
     document.getElementById('res-tons').textContent=tons.toFixed(2)+' t';
