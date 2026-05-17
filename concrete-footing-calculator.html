@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Concrete Footing Calculator – Volume & Bags Needed Free</title>
+  <meta name="description" content="Free concrete footing calculator. Calculate cubic yards and bags of concrete needed for round or square footings. Instant results, no signup required." />
+  <link rel="canonical" href="https://yourcalculatorsite.com/concrete-footing-calculator" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Footing Calculator","description":"Free online calculator to estimate concrete volume and bags needed for round or square footings.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I calculate concrete for footings?","acceptedAnswer":{"@type":"Answer","text":"For round footings: volume = π × radius² × depth. For square footings: volume = length × width × depth. Divide by 27 for cubic yards. Our footing calculator does this instantly for multiple footings at once."}},{"@type":"Question","name":"How deep should concrete footings be?","acceptedAnswer":{"@type":"Answer","text":"Footings should extend at least 12 inches below the frost line in your area. In warm climates with no frost, a minimum of 12 inches deep is standard. For decks and structural loads, 18–24 inches is common."}},{"@type":"Question","name":"How wide should concrete footings be?","acceptedAnswer":{"@type":"Answer","text":"Footing width should be at least twice the width of the wall or post it supports. For a 4-inch post, use a minimum 8-inch wide footing. Wider footings spread load better on soft soils."}}]}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--accent:#f59e0b;--accent2:#fbbf24;--text:#f0f0f0;--muted:#8b90a7;--border:#2e3347;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:1.2rem;color:var(--accent);text-decoration:none}
+    .logo span{color:var(--text)}
+    nav ul{list-style:none;display:flex;gap:24px}
+    nav ul a{color:var(--muted);text-decoration:none;font-size:.9rem}
+    nav ul a:hover{color:var(--text)}
+    .hero{text-align:center;padding:60px 24px 40px;max-width:720px;margin:0 auto}
+    .badge{display:inline-block;background:rgba(245,158,11,.12);color:var(--accent);border:1px solid rgba(245,158,11,.3);padding:4px 14px;border-radius:99px;font-size:.78rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;margin-bottom:16px}
+    h1{font-family:'Sora',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.15;margin-bottom:14px}
+    h1 em{font-style:normal;color:var(--accent)}
+    .hero p{color:var(--muted);font-size:1.05rem;max-width:520px;margin:0 auto}
+    .main{max-width:900px;margin:0 auto;padding:0 24px 80px;display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px}
+    .card h2{font-family:'Sora',sans-serif;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;margin-bottom:22px}
+    .shape-toggle{display:flex;background:var(--surface2);border-radius:8px;padding:4px;margin-bottom:24px;gap:4px}
+    .shape-toggle button{flex:1;padding:8px;border:none;border-radius:6px;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s}
+    .shape-toggle button.active{background:var(--accent);color:#000;font-weight:700}
+    .field{margin-bottom:18px}
+    label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px;font-weight:500}
+    .input-wrap{position:relative;display:flex;align-items:center}
+    input[type=number]{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 52px 12px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;transition:border-color .2s}
+    input[type=number]:focus{border-color:var(--accent)}
+    input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+    .unit-label{position:absolute;right:14px;color:var(--muted);font-size:.85rem;pointer-events:none}
+    .calc-btn{width:100%;padding:15px;background:var(--accent);color:#000;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:1rem;cursor:pointer;transition:all .2s;margin-top:4px}
+    .calc-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 6px 20px rgba(245,158,11,.25)}
+    .results{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:28px;display:none}
+    .results.visible{display:block}
+    .results h2{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    .result-primary{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:20px;text-align:center;margin-bottom:16px}
+    .result-primary .big{font-family:'Sora',sans-serif;font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1}
+    .result-primary .label{color:var(--muted);font-size:.85rem;margin-top:4px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .result-item{background:var(--surface2);border-radius:8px;padding:14px;text-align:center}
+    .result-item .val{font-family:'Sora',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text)}
+    .result-item .lbl{font-size:.78rem;color:var(--muted);margin-top:3px}
+    .tip-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px 14px;font-size:.85rem;color:#86efac;display:flex;gap:8px}
+    .related{max-width:900px;margin:0 auto;padding:0 24px 24px}
+    .related h2{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:14px}
+    .related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+    .related-link{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;text-decoration:none;color:var(--text);font-size:.9rem;display:flex;align-items:center;gap:10px;transition:all .2s}
+    .related-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px)}
+    .seo-content{max-width:900px;margin:40px auto 0;padding:0 24px 60px}
+    .seo-content h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;margin:32px 0 12px}
+    .seo-content h3{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:600;margin:22px 0 8px;color:var(--accent)}
+    .seo-content p{color:var(--muted);font-size:.95rem;margin-bottom:12px;line-height:1.75}
+    .seo-content table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem}
+    .seo-content th{background:var(--surface2);padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--border)}
+    .seo-content td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--muted)}
+    .faq{max-width:900px;margin:0 auto;padding:0 24px 60px}
+    .faq h2{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:20px}
+    .faq-item{border-bottom:1px solid var(--border);padding:18px 0}
+    .faq-q{font-weight:600;font-size:.95rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .faq-q::after{content:'+';color:var(--accent);font-size:1.3rem;flex-shrink:0;transition:transform .2s}
+    .faq-item.open .faq-q::after{transform:rotate(45deg)}
+    .faq-a{color:var(--muted);font-size:.9rem;line-height:1.75;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s}
+    .faq-item.open .faq-a{max-height:300px;padding-top:12px}
+    footer{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:28px 24px;color:var(--muted);font-size:.85rem}
+    footer a{color:var(--muted);text-decoration:none;margin:0 10px}
+    footer a:hover{color:var(--text)}
+    @media(max-width:640px){.main{grid-template-columns:1fr}nav ul{display:none}}
+  </style>
+</head>
+<body>
+<nav>
+  <a href="/index.html" class="logo">Calc<span>Hub</span></a>
+  <ul><li><a href="/index.html">Construction</a></li><li><a href="/about.html">About</a></li></ul>
+</nav>
+<header class="hero">
+  <div class="badge">🔩 Construction Calculator</div>
+  <h1>Concrete Footing <em>Calculator</em></h1>
+  <p>Calculate concrete volume and bags needed for round tube or square footings. Supports multiple footings at once. Free, instant, no signup.</p>
+</header>
+<div class="main">
+  <div class="card">
+    <h2>Footing Dimensions</h2>
+    <div class="shape-toggle">
+      <button class="active" onclick="setShape('round',this)">⭕ Round (Tube)</button>
+      <button onclick="setShape('square',this)">⬛ Square</button>
+    </div>
+    <div class="field" id="diameter-field">
+      <label>Diameter</label>
+      <div class="input-wrap"><input type="number" id="diameter" placeholder="e.g. 12" min="0" step="1"/><span class="unit-label">in</span></div>
+    </div>
+    <div class="field" id="side-field" style="display:none">
+      <label>Side Length</label>
+      <div class="input-wrap"><input type="number" id="side" placeholder="e.g. 12" min="0" step="1"/><span class="unit-label">in</span></div>
+    </div>
+    <div class="field">
+      <label>Depth / Height</label>
+      <div class="input-wrap"><input type="number" id="depth" placeholder="e.g. 36" min="0" step="1"/><span class="unit-label">in</span></div>
+    </div>
+    <div class="field">
+      <label>Number of Footings</label>
+      <div class="input-wrap"><input type="number" id="count" placeholder="e.g. 6" min="1" step="1" value="1"/><span class="unit-label">pcs</span></div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Concrete Needed →</button>
+  </div>
+  <div class="results" id="results">
+    <h2>Your Results</h2>
+    <div class="result-primary">
+      <div class="big" id="res-yards">—</div>
+      <div class="label">cubic yards total (all footings)</div>
+    </div>
+    <div class="result-grid">
+      <div class="result-item"><div class="val" id="res-each">—</div><div class="lbl">Cu yards each</div></div>
+      <div class="result-item"><div class="val" id="res-cf">—</div><div class="lbl">Cubic feet total</div></div>
+      <div class="result-item"><div class="val" id="res-60lb">—</div><div class="lbl">60 lb bags</div></div>
+      <div class="result-item"><div class="val" id="res-80lb">—</div><div class="lbl">80 lb bags</div></div>
+    </div>
+    <div class="tip-box"><span>💡</span><span id="tip-text">Add 10% extra for spillage and uneven holes.</span></div>
+  </div>
+</div>
+<section class="related">
+  <h2>More Construction Calculators</h2>
+  <div class="related-grid">
+    <a href="/concrete-slab-calculator.html" class="related-link"><span>🧱</span> Concrete Slab</a>
+    <a href="/roofing-calculator.html" class="related-link"><span>🏠</span> Roofing</a>
+    <a href="/tile-calculator.html" class="related-link"><span>🟫</span> Tile</a>
+    <a href="/gravel-calculator.html" class="related-link"><span>🪨</span> Gravel</a>
+    <a href="/mulch-calculator.html" class="related-link"><span>🌱</span> Mulch</a>
+    <a href="/paint-calculator.html" class="related-link"><span>🎨</span> Paint</a>
+  </div>
+</section>
+<article class="seo-content">
+  <h2>How to Calculate Concrete for Footings</h2>
+  <p>Footings are the base of any structure — decks, fences, pergolas, sheds, and additions all rely on properly sized concrete footings. Getting the volume right prevents wasted trips to the hardware store and ensures your structure is properly supported.</p>
+  <h3>Round vs Square Footings</h3>
+  <p>Round tube footings (using cardboard Sonotube forms) are the most common for deck posts and fence posts. Square footings are typically used for heavier structural loads or where forms are built from lumber. Both types are supported by our calculator.</p>
+  <h3>Footing Size Guide by Project</h3>
+  <table>
+    <thead><tr><th>Project</th><th>Diameter / Size</th><th>Depth</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Fence post</td><td>8–10 inches</td><td>Below frost line</td><td>Minimum 1/3 of post height</td></tr>
+      <tr><td>Deck post (light)</td><td>10–12 inches</td><td>Below frost line</td><td>Standard residential deck</td></tr>
+      <tr><td>Deck post (heavy)</td><td>12–16 inches</td><td>Below frost line +6"</td><td>Multi-level or hot tub deck</td></tr>
+      <tr><td>Pergola post</td><td>12 inches</td><td>24–36 inches</td><td>Check local building code</td></tr>
+      <tr><td>Shed foundation</td><td>12 inches</td><td>Below frost line</td><td>4 corners minimum</td></tr>
+    </tbody>
+  </table>
+  <h3>Always Check Your Local Frost Line</h3>
+  <p>The frost line depth varies significantly by location. In warm climates like Florida or Texas, footings only need to go 12 inches deep. In colder northern states or Canada, frost lines can be 48–60 inches deep. Footings above the frost line will heave and crack in winter.</p>
+</article>
+<section class="faq">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I calculate concrete for footings?</div><div class="faq-a">For round footings: volume = π × (diameter/2)² × depth. For square footings: length × width × depth. Convert cubic inches to cubic feet by dividing by 1728, then to cubic yards by dividing by 27. Our calculator does all of this automatically.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How deep should concrete footings be?</div><div class="faq-a">Footings must extend below the frost line for your area to prevent frost heave. In warm climates, 12 inches is the minimum. In cold northern regions, this can be 36–60 inches. Always check your local building code before digging.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many bags of concrete do I need per footing?</div><div class="faq-a">A standard 12-inch diameter footing at 36 inches deep needs about 0.098 cubic yards — roughly 4 bags of 60 lb concrete mix. Use our calculator above to get exact bag counts for any size.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I mix concrete by hand for footings?</div><div class="faq-a">Yes — for small projects with fewer than 10 footings, hand-mixing bagged concrete is practical. For larger projects, renting a concrete mixer saves significant time and effort. Ready-mix delivery is only cost-effective for very large footing projects.</div></div>
+</section>
+<footer>
+  <p style="margin-bottom:10px;">© 2025 CalcHub · Free Online Calculators</p>
+  <div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div>
+</footer>
+<script>
+  let shape='round';
+  function setShape(s,btn){
+    shape=s;
+    document.querySelectorAll('.shape-toggle button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('diameter-field').style.display=s==='round'?'block':'none';
+    document.getElementById('side-field').style.display=s==='square'?'block':'none';
+  }
+  function calculate(){
+    const depth=parseFloat(document.getElementById('depth').value);
+    const count=parseFloat(document.getElementById('count').value)||1;
+    if(!depth||depth<=0){alert('Please enter a valid depth.');return;}
+    let volCubicInEach=0;
+    if(shape==='round'){
+      const d=parseFloat(document.getElementById('diameter').value);
+      if(!d||d<=0){alert('Please enter a valid diameter.');return;}
+      const r=d/2;
+      volCubicInEach=Math.PI*r*r*depth;
+    } else {
+      const s=parseFloat(document.getElementById('side').value);
+      if(!s||s<=0){alert('Please enter a valid side length.');return;}
+      volCubicInEach=s*s*depth;
+    }
+    const cfEach=volCubicInEach/1728;
+    const cyEach=cfEach/27;
+    const cyTotal=cyEach*count*1.1;
+    const cfTotal=cyTotal*27;
+    const bags60=Math.ceil(cfTotal*0.45);
+    const bags80=Math.ceil(cfTotal*0.34);
+    document.getElementById('res-yards').textContent=cyTotal.toFixed(3);
+    document.getElementById('res-each').textContent=cyEach.toFixed(3)+' yd³';
+    document.getElementById('res-cf').textContent=cfTotal.toFixed(2)+' ft³';
+    document.getElementById('res-60lb').textContent=bags60;
+    document.getElementById('res-80lb').textContent=bags80;
+    let tip='';
+    if(bags60<=4)tip='Small project — bagged concrete from a hardware store is perfect for this.';
+    else if(bags60<=20)tip='Medium project — consider renting a concrete mixer to save mixing time.';
+    else tip='Large project — ready-mix concrete delivery may be more cost-effective than bags.';
+    document.getElementById('tip-text').textContent=tip;
+    document.getElementById('results').classList.add('visible');
+    document.getElementById('results').scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function toggleFaq(el){el.parentElement.classList.toggle('open');}
+</script>
+</body>
+</html>
