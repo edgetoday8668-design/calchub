@@ -90,6 +90,14 @@ footer a{color:var(--muted);text-decoration:none;margin:0 9px}
 footer a:hover{color:var(--text)}
 @media(max-width:700px){.calc-inner{grid-template-columns:1fr}.calc-area{position:static}.result-grid{grid-template-columns:repeat(2,1fr)}nav ul{display:none}}
   </style>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json"/>
+  <meta name="theme-color" content="#f59e0b"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="apple-mobile-web-app-title" content="CalcHub"/>
+  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
 </head>
 <body>
 <nav><a href="/index.html" class="logo">Calc<span>Hub</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
@@ -200,4 +208,14 @@ footer a:hover{color:var(--text)}
   }
   function toggleFaq(el){el.parentElement.classList.toggle('open');}
 </script>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("/sw.js")
+      .then(r=>console.log("[CalcHub] SW registered"))
+      .catch(e=>console.log("[CalcHub] SW error",e));
+  });
+}
+</script>
+
 </body></html>
