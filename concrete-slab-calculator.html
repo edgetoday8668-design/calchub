@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Concrete Slab Calculator – Free Instant Results</title>
-  <meta name="description" content="Free concrete slab calculator. Enter length, width and depth to instantly calculate how many cubic yards or cubic meters of concrete you need. No signup required." />
-  <link rel="canonical" href="https://yourcalculatorsite.com/concrete-slab-calculator" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Slab Calculator","description":"Free online calculator to estimate cubic yards or cubic meters of concrete needed for any slab project.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I calculate how much concrete I need for a slab?","acceptedAnswer":{"@type":"Answer","text":"Multiply the length x width x depth of the slab to get cubic feet, then divide by 27 to convert to cubic yards."}},{"@type":"Question","name":"How many bags of concrete do I need for a 10x10 slab?","acceptedAnswer":{"@type":"Answer","text":"For a 10x10 slab at 4 inches thick, you need approximately 1.23 cubic yards, which equals roughly 46 bags of 60 lb concrete mix."}},{"@type":"Question","name":"What thickness should a concrete slab be?","acceptedAnswer":{"@type":"Answer","text":"For driveways and patios, 4 inches is standard. For heavy vehicles, 6 inches is recommended."}}]}</script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Concrete Slab Calculator – Free Instant Results | BuildProCalc</title>
+  <meta name="description" content="Free concrete slab calculator. Calculate cubic yards, cubic meters and bags needed. Download PDF report, export Excel, share results. No signup required."/>
+  <link rel="canonical" href="https://buildprocalc.com/concrete-slab-calculator"/>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Slab Calculator","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
-    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--accent:#f59e0b;--accent2:#fbbf24;--text:#f0f0f0;--muted:#8b90a7;--border:#2e3347;--radius:14px}
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--accent:#f59e0b;--accent2:#fbbf24;--text:#f0f0f0;--muted:#8b90a7;--border:#2e3347;--green:#22c55e;--blue:#3b82f6;--purple:#8b5cf6;--radius:14px}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;font-size:15px}
     nav{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
@@ -24,7 +27,7 @@
     .calc-tabs-wrap::-webkit-scrollbar{display:none}
     .calc-tabs{display:flex;min-width:max-content;padding:0 16px}
     .calc-tab{display:flex;align-items:center;gap:7px;padding:10px 16px;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
-    .calc-tab:hover{color:var(--text);background:rgba(255,255,255,.03)}
+    .calc-tab:hover{color:var(--text)}
     .calc-tab.active{color:var(--accent);border-bottom-color:var(--accent);background:rgba(245,158,11,.05)}
     .page-title{padding:18px 24px 14px;max-width:1100px;margin:0 auto}
     .page-title h1{font-family:'Sora',sans-serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800}
@@ -40,9 +43,10 @@
     .field{margin-bottom:11px}
     label{display:block;font-size:.78rem;color:var(--muted);margin-bottom:4px;font-weight:500}
     .input-wrap{position:relative}
-    input[type=number]{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 44px 9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.92rem;outline:none;transition:border-color .2s}
-    input[type=number]:focus{border-color:var(--accent)}
+    input[type=number],input[type=text],textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 44px 9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.92rem;outline:none;transition:border-color .2s}
+    input[type=number]:focus,input[type=text]:focus,textarea:focus{border-color:var(--accent)}
     input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none}
+    textarea{resize:vertical;min-height:70px;padding:9px 12px}
     .unit-label{position:absolute;right:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.78rem;pointer-events:none}
     .wastage-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
     .wastage-row label{margin:0}
@@ -50,8 +54,8 @@
     input[type=range]{width:100%;accent-color:var(--accent);margin-bottom:12px}
     .calc-btn{width:100%;padding:11px;background:var(--accent);color:#000;border:none;border-radius:9px;font-family:'Sora',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:all .2s}
     .calc-btn:hover{background:var(--accent2);transform:translateY(-1px);box-shadow:0 5px 18px rgba(245,158,11,.25)}
-    .results-card{min-height:190px;display:flex;flex-direction:column;justify-content:center}
-    .empty-state{text-align:center;color:var(--muted);padding:16px 0}
+    .results-card{min-height:190px;display:flex;flex-direction:column}
+    .empty-state{text-align:center;color:var(--muted);padding:30px 0;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
     .empty-state .ei{font-size:2.2rem;opacity:.35;margin-bottom:8px}
     .empty-state p{font-size:.82rem}
     .result-primary{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px;text-align:center;margin-bottom:11px}
@@ -61,7 +65,56 @@
     .result-item{background:var(--surface2);border-radius:7px;padding:9px;text-align:center}
     .result-item .val{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;color:var(--text)}
     .result-item .lbl{font-size:.68rem;color:var(--muted);margin-top:2px}
-    .tip-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:7px;padding:9px 12px;font-size:.8rem;color:#86efac;display:flex;gap:7px}
+    .tip-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:7px;padding:9px 12px;font-size:.8rem;color:#86efac;display:flex;gap:7px;margin-bottom:14px}
+
+    /* REMARKS BOX */
+    .remarks-section{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:14px}
+    .remarks-section label{font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:6px;display:block}
+    .remarks-section textarea{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-size:.82rem;color:var(--text);width:100%;resize:vertical;min-height:60px;font-family:'DM Sans',sans-serif;outline:none}
+    .remarks-section textarea:focus{border-color:var(--accent)}
+
+    /* ACTION BUTTONS */
+    .action-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+    .action-btn{padding:9px 6px;border:1px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+    .action-btn:hover{transform:translateY(-2px)}
+    .action-btn .btn-icon{font-size:1.2rem}
+    .action-btn.pdf{border-color:rgba(239,68,68,.3);color:#fca5a5}
+    .action-btn.pdf:hover{background:rgba(239,68,68,.1);border-color:#ef4444}
+    .action-btn.excel{border-color:rgba(34,197,94,.3);color:#86efac}
+    .action-btn.excel:hover{background:rgba(34,197,94,.1);border-color:#22c55e}
+    .action-btn.share{border-color:rgba(59,130,246,.3);color:#93c5fd}
+    .action-btn.share:hover{background:rgba(59,130,246,.1);border-color:#3b82f6}
+    .action-btn.project{border-color:rgba(139,92,246,.3);color:#c4b5fd}
+    .action-btn.project:hover{background:rgba(139,92,246,.1);border-color:#8b5cf6}
+
+    /* PROJECT GROUP */
+    .project-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px;margin:0 24px 16px;max-width:1100px;margin-left:auto;margin-right:auto;display:none}
+    .project-panel.visible{display:block}
+    .project-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .project-header h3{font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;color:var(--purple)}
+    .project-items{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;max-height:220px;overflow-y:auto}
+    .project-item{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .project-item .pi-name{font-weight:600;font-size:.85rem;color:var(--accent)}
+    .project-item .pi-summary{font-size:.78rem;color:var(--muted);margin-top:2px}
+    .project-item .pi-remove{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:2px 6px;border-radius:4px}
+    .project-item .pi-remove:hover{color:#ef4444;background:rgba(239,68,68,.1)}
+    .project-empty{text-align:center;color:var(--muted);font-size:.82rem;padding:20px 0}
+    .project-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .proj-btn{padding:9px 16px;border:none;border-radius:8px;font-family:'Sora',sans-serif;font-weight:700;font-size:.8rem;cursor:pointer;transition:all .2s}
+    .proj-btn.pdf{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+    .proj-btn.pdf:hover{background:rgba(239,68,68,.25)}
+    .proj-btn.excel{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.3)}
+    .proj-btn.excel:hover{background:rgba(34,197,94,.25)}
+    .proj-btn.clear{background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+    .proj-btn.clear:hover{color:#ef4444}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:.85rem;color:var(--text);z-index:9999;transition:transform .3s;box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .toast.success{border-color:rgba(34,197,94,.4);color:#86efac}
+    .toast.error{border-color:rgba(239,68,68,.4);color:#fca5a5}
+
+    /* BELOW FOLD */
     .below-fold{max-width:1100px;margin:0 auto;padding:8px 24px 60px}
     .related-section{margin-bottom:28px}
     .related-section h2{font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:10px}
@@ -84,39 +137,37 @@
     footer{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:22px;color:var(--muted);font-size:.8rem}
     footer a{color:var(--muted);text-decoration:none;margin:0 9px}
     footer a:hover{color:var(--text)}
-    @media(max-width:700px){.calc-inner{grid-template-columns:1fr}.calc-area{position:static}.result-grid{grid-template-columns:repeat(2,1fr)}nav ul{display:none}}
+    @media(max-width:700px){.calc-inner{grid-template-columns:1fr}.calc-area{position:static}.result-grid{grid-template-columns:repeat(2,1fr)}.action-buttons{grid-template-columns:repeat(2,1fr)}nav ul{display:none}}
   </style>
-  <!-- PWA -->
-  <link rel="manifest" href="/manifest.json"/>
-  <meta name="theme-color" content="#f59e0b"/>
-  <meta name="mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="CalcHub"/>
-  <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
 </head>
 <body>
+
 <nav>
-  <a href="/index.html" class="logo">Calc<span>Hub</span></a>
-  <ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul>
+  <a href="/index.html" class="logo">BuildPro<span>Calc</span></a>
+  <ul>
+    <li><a href="/index.html">All Calculators</a></li>
+    <li><a href="/about.html">About</a></li>
+  </ul>
 </nav>
-<div class="calc-tabs-wrap">
-  <div class="calc-tabs">
-    <a href="/concrete-slab-calculator.html" class="calc-tab active">🧱 Concrete Slab</a>
-    <a href="/concrete-footing-calculator.html" class="calc-tab">🔩 Footing</a>
-    <a href="/roofing-calculator.html" class="calc-tab">🏠 Roofing</a>
-    <a href="/tile-calculator.html" class="calc-tab">🟫 Tile</a>
-    <a href="/gravel-calculator.html" class="calc-tab">🪨 Gravel</a>
-    <a href="/mulch-calculator.html" class="calc-tab">🌱 Mulch</a>
-    <a href="/paint-calculator.html" class="calc-tab">🎨 Paint</a>
-  </div>
-</div>
+
+<div class="calc-tabs-wrap"><div class="calc-tabs">
+  <a href="/concrete-slab-calculator.html" class="calc-tab active">🧱 Concrete Slab</a>
+  <a href="/concrete-footing-calculator.html" class="calc-tab">🔩 Footing</a>
+  <a href="/roofing-calculator.html" class="calc-tab">🏠 Roofing</a>
+  <a href="/tile-calculator.html" class="calc-tab">🟫 Tile</a>
+  <a href="/gravel-calculator.html" class="calc-tab">🪨 Gravel</a>
+  <a href="/mulch-calculator.html" class="calc-tab">🌱 Mulch</a>
+  <a href="/paint-calculator.html" class="calc-tab">🎨 Paint</a>
+</div></div>
+
 <div class="page-title">
   <h1>Concrete Slab <em>Calculator</em></h1>
-  <p>Instantly calculate cubic yards, cubic meters, and bags needed for any concrete slab.</p>
+  <p>Calculate cubic yards, cubic meters and bags needed — then download a PDF report, export to Excel, or share your results.</p>
 </div>
+
 <div class="calc-area">
   <div class="calc-inner">
+    <!-- INPUT CARD -->
     <div class="input-card">
       <div class="card-title">Enter Dimensions</div>
       <div class="unit-toggle">
@@ -130,11 +181,20 @@
       <input type="range" id="wastage" min="0" max="20" value="10" step="1" oninput="document.getElementById('wastage-val').textContent=this.value+'%'"/>
       <button class="calc-btn" onclick="calculate()">Calculate →</button>
     </div>
+
+    <!-- RESULTS CARD -->
     <div class="results-card">
       <div class="card-title">Results</div>
-      <div class="empty-state" id="empty-state"><div class="ei">🧱</div><p>Enter dimensions and click<br/><strong>Calculate</strong></p></div>
+      <div class="empty-state" id="empty-state">
+        <div class="ei">🧱</div>
+        <p>Enter dimensions and click<br/><strong>Calculate</strong> to see results</p>
+      </div>
+
       <div id="results-content" style="display:none">
-        <div class="result-primary"><div class="big" id="res-yards">—</div><div class="rl">cubic yards (with wastage)</div></div>
+        <div class="result-primary">
+          <div class="big" id="res-yards">—</div>
+          <div class="rl">cubic yards needed (with wastage)</div>
+        </div>
         <div class="result-grid">
           <div class="result-item"><div class="val" id="res-m3">—</div><div class="lbl">Cubic Meters</div></div>
           <div class="result-item"><div class="val" id="res-cf">—</div><div class="lbl">Cubic Feet</div></div>
@@ -142,10 +202,55 @@
           <div class="result-item"><div class="val" id="res-80lb">—</div><div class="lbl">80 lb bags</div></div>
         </div>
         <div class="tip-box"><span>💡</span><span id="tip-text"></span></div>
+
+        <!-- REMARKS -->
+        <div class="remarks-section">
+          <label>📝 Remarks (optional — included in your report)</label>
+          <textarea id="remarks" placeholder="e.g. Driveway project at 123 Main St. Estimated cost $850. Pour date: June 2025."></textarea>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+          <button class="action-btn pdf" onclick="downloadPDF()">
+            <span class="btn-icon">📄</span>
+            <span>Download PDF</span>
+          </button>
+          <button class="action-btn excel" onclick="downloadExcel()">
+            <span class="btn-icon">📊</span>
+            <span>Export Excel</span>
+          </button>
+          <button class="action-btn share" onclick="copyShareLink()">
+            <span class="btn-icon">🔗</span>
+            <span>Copy Link</span>
+          </button>
+          <button class="action-btn project" onclick="saveToProject()">
+            <span class="btn-icon">📁</span>
+            <span>Save to Project</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
+
+<!-- PROJECT PANEL -->
+<div class="project-panel" id="project-panel">
+  <div class="project-header">
+    <h3>📁 My Project Group</h3>
+    <span style="font-size:.78rem;color:var(--muted)" id="project-count">0 calculations saved</span>
+  </div>
+  <div class="project-items" id="project-items">
+    <div class="project-empty">No calculations saved yet. Use any calculator and click "Save to Project".</div>
+  </div>
+  <div class="project-actions">
+    <button class="proj-btn pdf" onclick="downloadProjectPDF()">📄 Download Project PDF</button>
+    <button class="proj-btn excel" onclick="downloadProjectExcel()">📊 Export Project Excel</button>
+    <button class="proj-btn clear" onclick="clearProject()">🗑️ Clear All</button>
+  </div>
+</div>
+
+<!-- BELOW FOLD -->
 <div class="below-fold">
   <div class="related-section">
     <h2>More Construction Calculators</h2>
@@ -172,69 +277,574 @@
         <tr><td>Industrial Floors</td><td>6–8 inches</td><td>Requires engineering review</td></tr>
       </tbody>
     </table>
-    <h3>Bags vs. Ready-Mix Concrete</h3>
-    <p>For small projects under 1 cubic yard, bagged concrete is more practical. For anything larger, ready-mix concrete by the truck is cheaper and far less labour-intensive.</p>
   </article>
   <section class="faq-section">
     <h2>Frequently Asked Questions</h2>
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I calculate how much concrete I need for a slab?</div><div class="faq-a">Multiply length × width × depth. In imperial, divide by 27 to get cubic yards. Our calculator does this instantly including a wastage buffer.</div></div>
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many bags of concrete for a 10x10 slab?</div><div class="faq-a">A 10×10 ft slab at 4 inches thick = 1.23 cubic yards = approximately 46 bags of 60 lb mix. Always buy a few extra bags.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What thickness should a concrete slab be?</div><div class="faq-a">Standard patios and driveways are 4 inches. Sidewalks 3–4 inches. Garage floors 5–6 inches for vehicle traffic.</div></div>
-    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How much does a cubic yard of concrete cost?</div><div class="faq-a">Ready-mix typically costs $120–$200 per cubic yard in the US. Bagged concrete costs roughly $5–$7 per 60 lb bag.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I download the calculation as a PDF?</div><div class="faq-a">Yes! After calculating, click "Download PDF" to get a professional report including your dimensions, results, and any remarks you add. Perfect for sharing with contractors or clients.</div></div>
+    <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the Project Group feature?</div><div class="faq-a">Save multiple calculations from different calculators into one Project Group, then download a single combined PDF or Excel report. Perfect for full renovation or construction project estimates.</div></div>
   </section>
 </div>
+
 <footer>
-  <p style="margin-bottom:8px">© 2025 CalcHub · Free Online Calculators</p>
+  <p style="margin-bottom:8px">© 2025 BuildProCalc.com · Free Construction Calculators</p>
   <div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div>
 </footer>
-<script>
-  let currentUnit='imperial';
-  function setUnit(unit,btn){
-    currentUnit=unit;
-    document.querySelectorAll('.unit-toggle button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    const isM=unit==='metric';
-    document.getElementById('unit-len').textContent=isM?'m':'ft';
-    document.getElementById('unit-wid').textContent=isM?'m':'ft';
-    document.getElementById('unit-dep').textContent=isM?'cm':'in';
-  }
-  function calculate(){
-    const l=parseFloat(document.getElementById('length').value);
-    const w=parseFloat(document.getElementById('width').value);
-    const d=parseFloat(document.getElementById('depth').value);
-    const wastage=1+parseFloat(document.getElementById('wastage').value)/100;
-    if(!l||!w||!d||l<=0||w<=0||d<=0){alert('Please enter valid dimensions.');return;}
-    let cubicMeters;
-    if(currentUnit==='imperial'){cubicMeters=l*w*(d/12)*wastage*0.0283168;}
-    else{cubicMeters=l*w*(d/100)*wastage;}
-    const cubicYards=cubicMeters*1.30795;
-    const cubicFeet=cubicMeters*35.3147;
-    const bags60=Math.ceil(cubicFeet*0.45);
-    const bags80=Math.ceil(cubicFeet*0.34);
-    document.getElementById('res-yards').textContent=cubicYards.toFixed(2);
-    document.getElementById('res-m3').textContent=cubicMeters.toFixed(2)+' m³';
-    document.getElementById('res-cf').textContent=cubicFeet.toFixed(1)+' ft³';
-    document.getElementById('res-60lb').textContent=bags60.toLocaleString();
-    document.getElementById('res-80lb').textContent=bags80.toLocaleString();
-    let tip='';
-    if(cubicYards<1)tip='Under 1 cubic yard — bagged concrete is most practical.';
-    else if(cubicYards<3)tip='1–3 cubic yards — bagged concrete works but a mini truck saves time.';
-    else tip='Over 3 cubic yards — order ready-mix by truck for best value.';
-    document.getElementById('tip-text').textContent=tip;
-    document.getElementById('empty-state').style.display='none';
-    document.getElementById('results-content').style.display='block';
-  }
-  function toggleFaq(el){el.parentElement.classList.toggle('open');}
-</script>
-<script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("/sw.js")
-      .then(r=>console.log("[CalcHub] SW registered"))
-      .catch(e=>console.log("[CalcHub] SW error",e));
-  });
-}
-</script>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STATE ────────────────────────────────────────
+let currentUnit = 'imperial';
+let lastResult = null;
+
+// ─── UNIT TOGGLE ──────────────────────────────────
+function setUnit(unit, btn) {
+  currentUnit = unit;
+  document.querySelectorAll('.unit-toggle button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const isM = unit === 'metric';
+  document.getElementById('unit-len').textContent = isM ? 'm' : 'ft';
+  document.getElementById('unit-wid').textContent = isM ? 'm' : 'ft';
+  document.getElementById('unit-dep').textContent = isM ? 'cm' : 'in';
+}
+
+// ─── CALCULATE ────────────────────────────────────
+function calculate() {
+  const l = parseFloat(document.getElementById('length').value);
+  const w = parseFloat(document.getElementById('width').value);
+  const d = parseFloat(document.getElementById('depth').value);
+  const wastage = 1 + parseFloat(document.getElementById('wastage').value) / 100;
+  if (!l || !w || !d || l <= 0 || w <= 0 || d <= 0) { alert('Please enter valid dimensions.'); return; }
+
+  let cubicMeters;
+  if (currentUnit === 'imperial') { cubicMeters = l * w * (d / 12) * wastage * 0.0283168; }
+  else { cubicMeters = l * w * (d / 100) * wastage; }
+
+  const cubicYards = cubicMeters * 1.30795;
+  const cubicFeet = cubicMeters * 35.3147;
+  const bags60 = Math.ceil(cubicFeet * 0.45);
+  const bags80 = Math.ceil(cubicFeet * 0.34);
+
+  document.getElementById('res-yards').textContent = cubicYards.toFixed(2);
+  document.getElementById('res-m3').textContent = cubicMeters.toFixed(2) + ' m³';
+  document.getElementById('res-cf').textContent = cubicFeet.toFixed(1) + ' ft³';
+  document.getElementById('res-60lb').textContent = bags60.toLocaleString();
+  document.getElementById('res-80lb').textContent = bags80.toLocaleString();
+
+  let tip = cubicYards < 1 ? 'Under 1 cubic yard — bagged concrete is most practical.' :
+    cubicYards < 3 ? '1–3 cubic yards — bagged concrete works but a mini truck saves time.' :
+    'Over 3 cubic yards — order ready-mix by truck for best value.';
+  document.getElementById('tip-text').textContent = tip;
+
+  lastResult = {
+    calculator: 'Concrete Slab Calculator',
+    date: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    inputs: {
+      'Length': l + ' ' + (currentUnit === 'imperial' ? 'ft' : 'm'),
+      'Width': w + ' ' + (currentUnit === 'imperial' ? 'ft' : 'm'),
+      'Thickness': d + ' ' + (currentUnit === 'imperial' ? 'in' : 'cm'),
+      'Wastage Buffer': document.getElementById('wastage').value + '%',
+      'Unit System': currentUnit === 'imperial' ? 'Imperial' : 'Metric'
+    },
+    results: {
+      'Cubic Yards': cubicYards.toFixed(2) + ' yd³',
+      'Cubic Meters': cubicMeters.toFixed(2) + ' m³',
+      'Cubic Feet': cubicFeet.toFixed(1) + ' ft³',
+      '60 lb Bags Needed': bags60.toLocaleString(),
+      '80 lb Bags Needed': bags80.toLocaleString()
+    },
+    tip: tip
+  };
+
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('results-content').style.display = 'block';
+
+  // Auto-fill URL params for sharing (try/catch for preview environments)
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set('l', l);
+    url.searchParams.set('w', w);
+    url.searchParams.set('d', d);
+    url.searchParams.set('waste', document.getElementById('wastage').value);
+    url.searchParams.set('unit', currentUnit);
+    window.history.replaceState({}, '', url);
+  } catch(e) { /* preview environment — ignored */ }
+}
+
+// ─── AUTO-LOAD FROM URL PARAMS ───────────────────
+window.addEventListener('load', () => {
+  try {
+    const p = new URLSearchParams(window.location.search);
+    if (p.get('l') && p.get('w') && p.get('d')) {
+      document.getElementById('length').value = p.get('l');
+      document.getElementById('width').value = p.get('w');
+      document.getElementById('depth').value = p.get('d');
+      if (p.get('waste')) {
+        document.getElementById('wastage').value = p.get('waste');
+        document.getElementById('wastage-val').textContent = p.get('waste') + '%';
+      }
+      if (p.get('unit') === 'metric') {
+        setUnit('metric', document.querySelectorAll('.unit-toggle button')[1]);
+      }
+      calculate();
+      showToast('✅ Shared calculation loaded!', 'success');
+    }
+  } catch(e) { /* preview environment — ignored */ }
+  loadProject();
+});
+
+// ─── TOAST ────────────────────────────────────────
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── COPY SHARE LINK ──────────────────────────────
+function copyShareLink() {
+  if (!lastResult) { showToast('⚠️ Calculate first!', 'error'); return; }
+  // Build share URL safely
+  let shareUrl = 'https://buildprocalc.com/concrete-slab-calculator';
+  try {
+    shareUrl = window.location.href;
+  } catch(e) {}
+  
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(shareUrl).then(() => {
+      showToast('🔗 Link copied! Share it on WhatsApp or email.', 'success');
+    }).catch(() => fallbackCopy(shareUrl));
+  } else {
+    fallbackCopy(shareUrl);
+  }
+}
+
+function fallbackCopy(text) {
+  try {
+    const el = document.createElement('textarea');
+    el.value = text;
+    el.style.position = 'fixed';
+    el.style.opacity = '0';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('🔗 Link copied!', 'success');
+  } catch(e) {
+    showToast('📋 Copy this link: ' + text, '');
+  }
+}
+
+// ─── PDF DOWNLOAD ─────────────────────────────────
+function downloadPDF() {
+  if (!lastResult) { showToast('⚠️ Calculate first!', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const remarks = document.getElementById('remarks').value.trim();
+  const r = lastResult;
+
+  // Header bar
+  doc.setFillColor(245, 158, 11);
+  doc.rect(0, 0, 220, 28, 'F');
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('BuildProCalc.com', 14, 12);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Free Construction Calculators', 14, 20);
+
+  // Title
+  doc.setTextColor(15, 17, 23);
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.text(r.calculator, 14, 42);
+
+  // Date
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text('Generated: ' + r.date, 14, 50);
+  doc.text('buildprocalc.com', 150, 50);
+
+  // Divider
+  doc.setDrawColor(245, 158, 11);
+  doc.setLineWidth(0.5);
+  doc.line(14, 54, 196, 54);
+
+  // Inputs section
+  let y = 64;
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(15, 17, 23);
+  doc.text('INPUT DIMENSIONS', 14, y);
+  y += 8;
+
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  Object.entries(r.inputs).forEach(([key, val]) => {
+    doc.setTextColor(80, 80, 80);
+    doc.text(key + ':', 14, y);
+    doc.setTextColor(15, 17, 23);
+    doc.setFont('helvetica', 'bold');
+    doc.text(val, 70, y);
+    doc.setFont('helvetica', 'normal');
+    y += 7;
+  });
+
+  y += 6;
+  doc.setDrawColor(220, 220, 220);
+  doc.setLineWidth(0.3);
+  doc.line(14, y, 196, y);
+  y += 10;
+
+  // Results section
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(15, 17, 23);
+  doc.text('CALCULATION RESULTS', 14, y);
+  y += 8;
+
+  // Result boxes
+  const resultEntries = Object.entries(r.results);
+  resultEntries.forEach(([key, val], i) => {
+    const x = i % 2 === 0 ? 14 : 110;
+    if (i % 2 === 0 && i > 0) y += 16;
+
+    doc.setFillColor(245, 158, 11, 0.1);
+    doc.setDrawColor(245, 158, 11);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(x, y - 5, 88, 14, 2, 2, 'D');
+
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(245, 158, 11);
+    doc.text(val, x + 4, y + 4);
+
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+    doc.text(key, x + 4, y + 9);
+  });
+
+  y += 22;
+
+  // Tip
+  doc.setFillColor(240, 255, 240);
+  doc.setDrawColor(34, 197, 94);
+  doc.roundedRect(14, y, 182, 14, 2, 2, 'FD');
+  doc.setFontSize(8);
+  doc.setTextColor(20, 100, 20);
+  doc.setFont('helvetica', 'normal');
+  doc.text('💡 ' + r.tip, 18, y + 9);
+  y += 22;
+
+  // Remarks
+  if (remarks) {
+    doc.setDrawColor(200, 200, 200);
+    doc.setLineWidth(0.3);
+    doc.line(14, y, 196, y);
+    y += 10;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 17, 23);
+    doc.text('REMARKS / NOTES', 14, y);
+    y += 8;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    const lines = doc.splitTextToSize(remarks, 178);
+    doc.text(lines, 14, y);
+    y += lines.length * 6 + 6;
+  }
+
+  // Footer
+  doc.setFillColor(245, 158, 11);
+  doc.rect(0, 282, 220, 15, 'F');
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Generated by BuildProCalc.com — Free Construction Calculators', 14, 291);
+  doc.text('Page 1 of 1', 170, 291);
+
+  doc.save('concrete-slab-calculation.pdf');
+  showToast('📄 PDF downloaded!', 'success');
+}
+
+// ─── EXCEL EXPORT ─────────────────────────────────
+function downloadExcel() {
+  if (!lastResult) { showToast('⚠️ Calculate first!', 'error'); return; }
+  const r = lastResult;
+  const remarks = document.getElementById('remarks').value.trim();
+
+  const wsData = [
+    ['BuildProCalc.com — Free Construction Calculators'],
+    [],
+    [r.calculator],
+    ['Generated:', r.date],
+    [],
+    ['INPUT DIMENSIONS'],
+    ...Object.entries(r.inputs).map(([k, v]) => [k, v]),
+    [],
+    ['CALCULATION RESULTS'],
+    ...Object.entries(r.results).map(([k, v]) => [k, v]),
+    [],
+    ['TIP', r.tip],
+  ];
+
+  if (remarks) {
+    wsData.push([]);
+    wsData.push(['REMARKS / NOTES']);
+    wsData.push([remarks]);
+  }
+
+  wsData.push([]);
+  wsData.push(['Generated by BuildProCalc.com']);
+
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+  // Column widths
+  ws['!cols'] = [{ wch: 30 }, { wch: 40 }];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Concrete Slab');
+  XLSX.writeFile(wb, 'concrete-slab-calculation.xlsx');
+  showToast('📊 Excel file downloaded!', 'success');
+}
+
+// ─── PROJECT GROUP ────────────────────────────────
+let project = [];
+
+function loadProject() {
+  try {
+    const saved = localStorage.getItem('buildprocalc-project');
+    if (saved) project = JSON.parse(saved);
+  } catch(e) { project = []; }
+  renderProject();
+}
+
+function saveProject() {
+  localStorage.setItem('buildprocalc-project', JSON.stringify(project));
+}
+
+function saveToProject() {
+  if (!lastResult) { showToast('⚠️ Calculate first!', 'error'); return; }
+  const remarks = document.getElementById('remarks').value.trim();
+  const item = {
+    id: Date.now(),
+    ...lastResult,
+    remarks: remarks
+  };
+  project.push(item);
+  saveProject();
+  renderProject();
+  document.getElementById('project-panel').classList.add('visible');
+  showToast('📁 Saved to Project Group!', 'success');
+}
+
+function renderProject() {
+  const container = document.getElementById('project-items');
+  const countEl = document.getElementById('project-count');
+  countEl.textContent = project.length + ' calculation' + (project.length !== 1 ? 's' : '') + ' saved';
+
+  if (project.length === 0) {
+    container.innerHTML = '<div class="project-empty">No calculations saved yet. Use any calculator and click "Save to Project".</div>';
+    return;
+  }
+
+  container.innerHTML = project.map((item, i) => `
+    <div class="project-item">
+      <div>
+        <div class="pi-name">${item.calculator}</div>
+        <div class="pi-summary">${item.date} · ${Object.values(item.results)[0]}${item.remarks ? ' · ' + item.remarks.substring(0, 40) + (item.remarks.length > 40 ? '...' : '') : ''}</div>
+      </div>
+      <button class="pi-remove" onclick="removeFromProject(${item.id})">✕</button>
+    </div>
+  `).join('');
+
+  if (project.length > 0) {
+    document.getElementById('project-panel').classList.add('visible');
+  }
+}
+
+function removeFromProject(id) {
+  project = project.filter(p => p.id !== id);
+  saveProject();
+  renderProject();
+  if (project.length === 0) {
+    document.getElementById('project-panel').classList.remove('visible');
+  }
+  showToast('Removed from project.', '');
+}
+
+function clearProject() {
+  if (!confirm('Clear all saved calculations?')) return;
+  project = [];
+  saveProject();
+  renderProject();
+  document.getElementById('project-panel').classList.remove('visible');
+  showToast('🗑️ Project cleared.', '');
+}
+
+// ─── PROJECT PDF ──────────────────────────────────
+function downloadProjectPDF() {
+  if (project.length === 0) { showToast('⚠️ No calculations in project.', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  // Cover header
+  doc.setFillColor(245, 158, 11);
+  doc.rect(0, 0, 220, 32, 'F');
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('BuildProCalc.com', 14, 13);
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Project Estimation Report', 14, 22);
+  doc.setFontSize(9);
+  doc.text('Generated: ' + new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }), 14, 29);
+
+  let y = 46;
+
+  // Summary box
+  doc.setFillColor(248, 248, 248);
+  doc.setDrawColor(200, 200, 200);
+  doc.roundedRect(14, y - 4, 182, 14, 2, 2, 'FD');
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(15, 17, 23);
+  doc.text(`Total Calculations: ${project.length}`, 18, y + 5);
+  y += 18;
+
+  project.forEach((item, idx) => {
+    // Check if need new page
+    if (y > 240) {
+      doc.addPage();
+      y = 20;
+    }
+
+    // Calculation header
+    doc.setFillColor(30, 30, 40);
+    doc.rect(14, y - 4, 182, 12, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(245, 158, 11);
+    doc.text(`${idx + 1}. ${item.calculator}`, 18, y + 4);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(item.date, 160, y + 4);
+    y += 16;
+
+    // Inputs
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(80, 80, 80);
+    Object.entries(item.inputs).forEach(([k, v]) => {
+      doc.text(k + ': ' + v, 18, y);
+      y += 5.5;
+    });
+    y += 2;
+
+    // Results
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(245, 158, 11);
+    Object.entries(item.results).forEach(([k, v]) => {
+      doc.text(k + ': ', 18, y);
+      doc.setTextColor(15, 17, 23);
+      doc.text(v, 70, y);
+      doc.setTextColor(245, 158, 11);
+      y += 5.5;
+    });
+    y += 2;
+
+    // Remarks
+    if (item.remarks) {
+      doc.setFont('helvetica', 'italic');
+      doc.setTextColor(80, 80, 80);
+      const lines = doc.splitTextToSize('Remarks: ' + item.remarks, 172);
+      doc.text(lines, 18, y);
+      y += lines.length * 5 + 2;
+    }
+
+    // Separator
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.2);
+    doc.line(14, y, 196, y);
+    y += 10;
+  });
+
+  // Footer
+  doc.setFillColor(245, 158, 11);
+  doc.rect(0, 282, 220, 15, 'F');
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(0, 0, 0);
+  doc.text('Generated by BuildProCalc.com — Free Construction Calculators', 14, 291);
+
+  doc.save('buildprocalc-project-report.pdf');
+  showToast('📄 Project PDF downloaded!', 'success');
+}
+
+// ─── PROJECT EXCEL ────────────────────────────────
+function downloadProjectExcel() {
+  if (project.length === 0) { showToast('⚠️ No calculations in project.', 'error'); return; }
+  const wb = XLSX.utils.book_new();
+
+  // Summary sheet
+  const summaryData = [
+    ['BuildProCalc.com — Project Estimation Report'],
+    ['Generated:', new Date().toLocaleDateString()],
+    ['Total Calculations:', project.length],
+    [],
+    ['#', 'Calculator', 'Date', 'Primary Result', 'Remarks']
+  ];
+  project.forEach((item, i) => {
+    summaryData.push([
+      i + 1,
+      item.calculator,
+      item.date,
+      Object.values(item.results)[0],
+      item.remarks || ''
+    ]);
+  });
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{ wch: 5 }, { wch: 30 }, { wch: 15 }, { wch: 25 }, { wch: 40 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  // Individual sheets per calculation
+  project.forEach((item, i) => {
+    const sheetData = [
+      [item.calculator],
+      ['Date:', item.date],
+      [],
+      ['INPUT DIMENSIONS'],
+      ...Object.entries(item.inputs).map(([k, v]) => [k, v]),
+      [],
+      ['RESULTS'],
+      ...Object.entries(item.results).map(([k, v]) => [k, v]),
+      [],
+      ['TIP', item.tip],
+    ];
+    if (item.remarks) {
+      sheetData.push([]);
+      sheetData.push(['REMARKS', item.remarks]);
+    }
+    const ws = XLSX.utils.aoa_to_sheet(sheetData);
+    ws['!cols'] = [{ wch: 25 }, { wch: 35 }];
+    XLSX.utils.book_append_sheet(wb, ws, (i + 1) + '. ' + item.calculator.substring(0, 25));
+  });
+
+  XLSX.writeFile(wb, 'buildprocalc-project-report.xlsx');
+  showToast('📊 Project Excel downloaded!', 'success');
+}
+
+// ─── FAQ ──────────────────────────────────────────
+function toggleFaq(el) { el.parentElement.classList.toggle('open'); }
+</script>
 </body>
 </html>
