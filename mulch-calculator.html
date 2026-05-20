@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mulch Calculator – How Many Cubic Yards of Mulch Do I Need?</title>
   <meta name="description" content="Free mulch calculator. Enter garden bed dimensions and depth to instantly calculate cubic yards or bags of mulch needed. Free, no signup required."/>
-  <link rel="canonical" href="https://yourcalculatorsite.com/mulch-calculator"/>
+  <link rel="canonical" href="https://freecalc247.com/mulch-calculator"/>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Mulch Calculator","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many bags of mulch per cubic yard?","acceptedAnswer":{"@type":"Answer","text":"One cubic yard equals 27 cubic feet. Standard 2 cubic foot bags means you need about 13-14 bags per cubic yard."}},{"@type":"Question","name":"How deep should mulch be?","acceptedAnswer":{"@type":"Answer","text":"3 inches is ideal for most garden beds. Deep enough to suppress weeds and retain moisture without starving plant roots."}},{"@type":"Question","name":"How often should I replace mulch?","acceptedAnswer":{"@type":"Answer","text":"Organic mulch decomposes over 1-2 years. Top up with 1-2 inches each spring rather than replacing entirely."}}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,11 +96,11 @@ footer a:hover{color:var(--text)}
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="CalcHub"/>
+  <meta name="apple-mobile-web-app-title" content="FreeCalc247"/>
   <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
 </head>
 <body>
-<nav><a href="/index.html" class="logo">Calc<span>Hub</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
+<nav><a href="/index.html" class="logo">Free<span>Calc247</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
 <div class="calc-tabs-wrap"><div class="calc-tabs">
   <a href="/concrete-slab-calculator.html" class="calc-tab">🧱 Concrete Slab</a>
   <a href="/concrete-footing-calculator.html" class="calc-tab">🔩 Footing</a>
@@ -109,6 +109,7 @@ footer a:hover{color:var(--text)}
   <a href="/gravel-calculator.html" class="calc-tab">🪨 Gravel</a>
   <a href="/mulch-calculator.html" class="calc-tab active">🌱 Mulch</a>
   <a href="/paint-calculator.html" class="calc-tab">🎨 Paint</a>
+  <a href="/project.html" class="calc-tab" id="project-tab-link" style="border-left:1px solid var(--border);margin-left:8px;color:#c4b5fd">&#128193; My Project (<span id="project-tab-count">0</span>)</a>
 </div></div>
 <div class="page-title"><h1>Mulch <em>Calculator</em></h1><p>Calculate exactly how many cubic yards or bags of mulch you need for any garden bed.</p></div>
 <div class="calc-area"><div class="calc-inner">
@@ -171,7 +172,7 @@ footer a:hover{color:var(--text)}
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How often should I replace mulch?</div><div class="faq-a">Organic mulch decomposes over 1–2 years. Add 1–2 inches each spring rather than replacing entirely — decomposed mulch improves soil quality.</div></div>
   </section>
 </div>
-<footer><p style="margin-bottom:8px">© 2025 CalcHub · Free Online Calculators</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
+<footer><p style="margin-bottom:8px">© 2025 FreeCalc247.com · Free Calculators 24/7</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
 <script>
   function calculate(){
     const l=parseFloat(document.getElementById('len').value);
@@ -200,10 +201,23 @@ footer a:hover{color:var(--text)}
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{
     navigator.serviceWorker.register("/sw.js")
-      .then(r=>console.log("[CalcHub] SW registered"))
-      .catch(e=>console.log("[CalcHub] SW error",e));
+      .then(r=>console.log("[FreeCalc247] SW registered"))
+      .catch(e=>console.log("[FreeCalc247] SW error",e));
   });
 }
 </script>
 
+<script>
+// Update project tab count from localStorage
+try {
+  var _p = localStorage.getItem('buildprocalc-project');
+  var _count = _p ? JSON.parse(_p).length : 0;
+  var _el = document.getElementById('project-tab-count');
+  if(_el) _el.textContent = _count;
+  if(_count > 0) {
+    var _tab = document.getElementById('project-tab-link');
+    if(_tab) { _tab.style.color='#c4b5fd'; _tab.style.borderBottomColor='#8b5cf6'; }
+  }
+} catch(e) {}
+</script>
 </body></html>

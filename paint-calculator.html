@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Paint Calculator – How Much Paint Do I Need? Free Tool</title>
   <meta name="description" content="Free paint calculator. Enter room dimensions to calculate exactly how many gallons of paint you need for walls, ceilings, and trim. Instant results, free."/>
-  <link rel="canonical" href="https://yourcalculatorsite.com/paint-calculator"/>
+  <link rel="canonical" href="https://freecalc247.com/paint-calculator"/>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Paint Calculator","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How much paint do I need for a 12x12 room?","acceptedAnswer":{"@type":"Answer","text":"A 12x12 room with 8 ft ceilings has about 320 sq ft of wall space. You need roughly 2 gallons for two coats."}},{"@type":"Question","name":"How many square feet does a gallon of paint cover?","acceptedAnswer":{"@type":"Answer","text":"A gallon of paint typically covers 350-400 square feet with one coat on a smooth surface."}},{"@type":"Question","name":"How many coats of paint do I need?","acceptedAnswer":{"@type":"Answer","text":"Two coats are recommended for most painting jobs, especially when changing colours or painting over dark colours."}}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,11 +96,11 @@ footer a:hover{color:var(--text)}
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="CalcHub"/>
+  <meta name="apple-mobile-web-app-title" content="FreeCalc247"/>
   <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
 </head>
 <body>
-<nav><a href="/index.html" class="logo">Calc<span>Hub</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
+<nav><a href="/index.html" class="logo">Free<span>Calc247</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
 <div class="calc-tabs-wrap"><div class="calc-tabs">
   <a href="/concrete-slab-calculator.html" class="calc-tab">🧱 Concrete Slab</a>
   <a href="/concrete-footing-calculator.html" class="calc-tab">🔩 Footing</a>
@@ -109,6 +109,7 @@ footer a:hover{color:var(--text)}
   <a href="/gravel-calculator.html" class="calc-tab">🪨 Gravel</a>
   <a href="/mulch-calculator.html" class="calc-tab">🌱 Mulch</a>
   <a href="/paint-calculator.html" class="calc-tab active">🎨 Paint</a>
+  <a href="/project.html" class="calc-tab" id="project-tab-link" style="border-left:1px solid var(--border);margin-left:8px;color:#c4b5fd">&#128193; My Project (<span id="project-tab-count">0</span>)</a>
 </div></div>
 <div class="page-title"><h1>Paint <em>Calculator</em></h1><p>Calculate exactly how many gallons of paint you need for any room — walls, ceiling, and trim.</p></div>
 <div class="calc-area"><div class="calc-inner">
@@ -178,7 +179,7 @@ footer a:hover{color:var(--text)}
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is the difference between paint finishes?</div><div class="faq-a">Flat/matte hides imperfections — ideal for ceilings. Eggshell and satin are wipeable — good for living rooms and bedrooms. Semi-gloss is moisture-resistant — ideal for trim, kitchens, and bathrooms.</div></div>
   </section>
 </div>
-<footer><p style="margin-bottom:8px">© 2025 CalcHub · Free Online Calculators</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
+<footer><p style="margin-bottom:8px">© 2025 FreeCalc247.com · Free Calculators 24/7</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
 <script>
   function calculate(){
     const rl=parseFloat(document.getElementById('rlen').value);
@@ -212,10 +213,23 @@ footer a:hover{color:var(--text)}
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{
     navigator.serviceWorker.register("/sw.js")
-      .then(r=>console.log("[CalcHub] SW registered"))
-      .catch(e=>console.log("[CalcHub] SW error",e));
+      .then(r=>console.log("[FreeCalc247] SW registered"))
+      .catch(e=>console.log("[FreeCalc247] SW error",e));
   });
 }
 </script>
 
+<script>
+// Update project tab count from localStorage
+try {
+  var _p = localStorage.getItem('buildprocalc-project');
+  var _count = _p ? JSON.parse(_p).length : 0;
+  var _el = document.getElementById('project-tab-count');
+  if(_el) _el.textContent = _count;
+  if(_count > 0) {
+    var _tab = document.getElementById('project-tab-link');
+    if(_tab) { _tab.style.color='#c4b5fd'; _tab.style.borderBottomColor='#8b5cf6'; }
+  }
+} catch(e) {}
+</script>
 </body></html>

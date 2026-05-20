@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Project – BuildProCalc</title>
+  <meta name="description" content="View, manage and download all your saved calculations as a single PDF or Excel report. Free project estimation tool by BuildProCalc."/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root{--bg:#0f1117;--surface:#1a1d27;--surface2:#22263a;--accent:#f59e0b;--accent2:#fbbf24;--text:#f0f0f0;--muted:#8b90a7;--border:#2e3347;--green:#22c55e;--purple:#8b5cf6;--radius:14px}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;font-size:15px}
+    nav{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200}
+    .logo{font-family:'Sora',sans-serif;font-weight:800;font-size:1.1rem;color:var(--accent);text-decoration:none}
+    .logo span{color:var(--text)}
+    nav ul{list-style:none;display:flex;gap:20px}
+    nav ul a{color:var(--muted);text-decoration:none;font-size:.85rem}
+    nav ul a:hover{color:var(--text)}
+    .calc-tabs-wrap{background:var(--surface2);border-bottom:1px solid var(--border);position:sticky;top:49px;z-index:190;overflow-x:auto;scrollbar-width:none}
+    .calc-tabs-wrap::-webkit-scrollbar{display:none}
+    .calc-tabs{display:flex;min-width:max-content;padding:0 16px}
+    .calc-tab{display:flex;align-items:center;gap:7px;padding:10px 16px;text-decoration:none;color:var(--muted);font-size:.82rem;font-weight:500;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+    .calc-tab:hover{color:var(--text)}
+    .calc-tab.active{color:var(--purple);border-bottom-color:var(--purple);background:rgba(139,92,246,.05)}
+    .calc-tab.project-tab{border-left:1px solid var(--border);margin-left:8px;color:#c4b5fd}
+
+    /* PAGE */
+    .page{max-width:860px;margin:0 auto;padding:32px 24px 80px}
+
+    /* INTRO BANNER */
+    .intro-banner{background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(139,92,246,.04));border:1px solid rgba(139,92,246,.25);border-radius:var(--radius);padding:24px;margin-bottom:28px}
+    .intro-banner h1{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px}
+    .intro-banner h1 span{color:var(--purple)}
+    .intro-banner p{color:var(--muted);font-size:.9rem;line-height:1.7;margin-bottom:14px}
+    .intro-steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+    .intro-step{background:var(--surface2);border-radius:9px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px}
+    .intro-step .step-icon{font-size:1.3rem;flex-shrink:0}
+    .intro-step .step-text{font-size:.8rem;color:var(--muted);line-height:1.5}
+    .intro-step .step-text strong{color:var(--text);display:block;margin-bottom:2px}
+
+    /* PROJECT STATS */
+    .project-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px}
+    .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+    .stat-card .stat-num{font-family:'Sora',sans-serif;font-size:1.8rem;font-weight:800;color:var(--accent)}
+    .stat-card .stat-lbl{font-size:.75rem;color:var(--muted);margin-top:2px}
+
+    /* PROJECT NAME INPUT */
+    .project-name-row{display:flex;gap:10px;margin-bottom:20px;align-items:center}
+    .project-name-row label{font-size:.82rem;color:var(--muted);white-space:nowrap;font-weight:600}
+    .project-name-row input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .2s}
+    .project-name-row input:focus{border-color:var(--purple)}
+
+    /* DOWNLOAD ACTIONS */
+    .download-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+    .dl-btn{padding:13px 16px;border:none;border-radius:10px;font-family:'Sora',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+    .dl-btn:hover{transform:translateY(-2px)}
+    .dl-btn.pdf{background:rgba(239,68,68,.15);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+    .dl-btn.pdf:hover{background:rgba(239,68,68,.25);box-shadow:0 4px 16px rgba(239,68,68,.2)}
+    .dl-btn.excel{background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.3)}
+    .dl-btn.excel:hover{background:rgba(34,197,94,.25);box-shadow:0 4px 16px rgba(34,197,94,.2)}
+    .dl-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+    /* ITEMS LIST */
+    .items-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+    .items-header h2{font-family:'Sora',sans-serif;font-size:1rem;font-weight:700}
+    .clear-btn{background:transparent;border:1px solid var(--border);border-radius:7px;padding:5px 12px;color:var(--muted);font-size:.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+    .clear-btn:hover{border-color:#ef4444;color:#ef4444}
+
+    .project-items{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+
+    .project-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;gap:14px;align-items:flex-start;transition:border-color .2s}
+    .project-item:hover{border-color:rgba(139,92,246,.3)}
+    .item-number{width:28px;height:28px;background:var(--purple);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:800;font-size:.8rem;color:#fff;flex-shrink:0;margin-top:2px}
+    .item-body{flex:1}
+    .item-name{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;color:var(--accent);margin-bottom:4px}
+    .item-date{font-size:.75rem;color:var(--muted);margin-bottom:8px}
+    .item-results{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}
+    .item-result-tag{background:var(--surface2);border-radius:6px;padding:3px 9px;font-size:.75rem;color:var(--text)}
+    .item-result-tag span{color:var(--accent);font-weight:700}
+    .item-remarks{font-size:.78rem;color:var(--muted);font-style:italic;background:var(--surface2);border-radius:6px;padding:6px 10px;margin-top:6px}
+    .item-remove{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:4px 8px;border-radius:6px;transition:all .2s;flex-shrink:0}
+    .item-remove:hover{background:rgba(239,68,68,.1);color:#ef4444}
+
+    /* EMPTY STATE */
+    .empty-project{text-align:center;padding:60px 20px;color:var(--muted)}
+    .empty-project .empty-icon{font-size:3rem;margin-bottom:16px;opacity:.3}
+    .empty-project h3{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:8px}
+    .empty-project p{font-size:.88rem;margin-bottom:24px;line-height:1.7}
+    .empty-project .calc-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .empty-project .calc-link{background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:9px 14px;text-decoration:none;color:var(--text);font-size:.82rem;transition:all .2s}
+    .empty-project .calc-link:hover{border-color:var(--accent);color:var(--accent)}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:.85rem;color:var(--text);z-index:9999;transition:transform .3s;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .toast.success{border-color:rgba(34,197,94,.4);color:#86efac}
+    .toast.error{border-color:rgba(239,68,68,.4);color:#fca5a5}
+
+    footer{background:var(--surface);border-top:1px solid var(--border);text-align:center;padding:22px;color:var(--muted);font-size:.8rem}
+    footer a{color:var(--muted);text-decoration:none;margin:0 9px}
+    footer a:hover{color:var(--text)}
+    @media(max-width:600px){.project-stats{grid-template-columns:1fr 1fr}.download-actions{grid-template-columns:1fr}.intro-steps{grid-template-columns:1fr}nav ul{display:none}}
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/index.html" class="logo">BuildPro<span>Calc</span></a>
+  <ul>
+    <li><a href="/index.html">All Calculators</a></li>
+    <li><a href="/about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="calc-tabs-wrap"><div class="calc-tabs">
+  <a href="/concrete-slab-calculator.html" class="calc-tab">🧱 Concrete Slab</a>
+  <a href="/concrete-footing-calculator.html" class="calc-tab">🔩 Footing</a>
+  <a href="/roofing-calculator.html" class="calc-tab">🏠 Roofing</a>
+  <a href="/tile-calculator.html" class="calc-tab">🟫 Tile</a>
+  <a href="/gravel-calculator.html" class="calc-tab">🪨 Gravel</a>
+  <a href="/mulch-calculator.html" class="calc-tab">🌱 Mulch</a>
+  <a href="/paint-calculator.html" class="calc-tab">🎨 Paint</a>
+  <a href="/project.html" class="calc-tab project-tab active" style="border-left:1px solid var(--border);margin-left:8px">📁 My Project (<span id="project-tab-count">0</span>)</a>
+</div></div>
+
+<div class="page">
+
+  <!-- INTRO BANNER -->
+  <div class="intro-banner">
+    <h1>📁 My <span>Project Group</span></h1>
+    <p>Save calculations from any calculator into your project. When ready, download everything as a single professional PDF report or Excel spreadsheet — perfect for sharing with contractors, clients, or keeping as your renovation record.</p>
+    <div class="intro-steps">
+      <div class="intro-step">
+        <div class="step-icon">🧮</div>
+        <div class="step-text"><strong>Step 1 — Calculate</strong>Use any calculator above to get your results</div>
+      </div>
+      <div class="intro-step">
+        <div class="step-icon">📁</div>
+        <div class="step-text"><strong>Step 2 — Save</strong>Click "Save to Project" after each calculation</div>
+      </div>
+      <div class="intro-step">
+        <div class="step-icon">📄</div>
+        <div class="step-text"><strong>Step 3 — Download</strong>Come here and download your full project report</div>
+      </div>
+      <div class="intro-step">
+        <div class="step-icon">📤</div>
+        <div class="step-text"><strong>Step 4 — Share</strong>Send to WhatsApp, email, or keep for records</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="project-stats">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-count">0</div>
+      <div class="stat-lbl">Calculations Saved</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-types">0</div>
+      <div class="stat-lbl">Calculator Types Used</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-date">—</div>
+      <div class="stat-lbl">Last Updated</div>
+    </div>
+  </div>
+
+  <!-- PROJECT NAME -->
+  <div class="project-name-row">
+    <label>Project Name:</label>
+    <input type="text" id="project-name" placeholder="e.g. Home Renovation 2025, Client ABC, Driveway Project..." oninput="saveProjectName()"/>
+  </div>
+
+  <!-- DOWNLOAD ACTIONS -->
+  <div class="download-actions">
+    <button class="dl-btn pdf" id="btn-pdf" onclick="downloadProjectPDF()" disabled>
+      📄 Download Project PDF
+    </button>
+    <button class="dl-btn excel" id="btn-excel" onclick="downloadProjectExcel()" disabled>
+      📊 Export Project Excel
+    </button>
+  </div>
+
+  <!-- ITEMS -->
+  <div class="items-header">
+    <h2>Saved Calculations</h2>
+    <button class="clear-btn" onclick="clearProject()">🗑️ Clear All</button>
+  </div>
+
+  <div class="project-items" id="project-items">
+    <!-- filled by JS -->
+  </div>
+
+</div>
+
+<footer>
+  <p style="margin-bottom:8px">© 2025 BuildProCalc.com · Free Construction Calculators</p>
+  <div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let project = [];
+let projectName = '';
+
+// ── LOAD ─────────────────────────────────────────
+function loadProject() {
+  try {
+    const saved = localStorage.getItem('buildprocalc-project');
+    if (saved) project = JSON.parse(saved);
+    const name = localStorage.getItem('buildprocalc-project-name');
+    if (name) {
+      projectName = name;
+      document.getElementById('project-name').value = name;
+    }
+  } catch(e) { project = []; }
+  renderAll();
+}
+
+function saveProjectName() {
+  projectName = document.getElementById('project-name').value;
+  try { localStorage.setItem('buildprocalc-project-name', projectName); } catch(e) {}
+}
+
+// ── RENDER ───────────────────────────────────────
+function renderAll() {
+  renderStats();
+  renderItems();
+  updateButtons();
+  updateTabCount();
+}
+
+function renderStats() {
+  document.getElementById('stat-count').textContent = project.length;
+  const types = new Set(project.map(p => p.calculator)).size;
+  document.getElementById('stat-types').textContent = types;
+  if (project.length > 0) {
+    const last = project[project.length - 1];
+    document.getElementById('stat-date').textContent = last.date;
+  } else {
+    document.getElementById('stat-date').textContent = '—';
+  }
+}
+
+function updateButtons() {
+  const hasItems = project.length > 0;
+  document.getElementById('btn-pdf').disabled = !hasItems;
+  document.getElementById('btn-excel').disabled = !hasItems;
+}
+
+function updateTabCount() {
+  const el = document.getElementById('project-tab-count');
+  if(el) el.textContent = project.length;
+}
+
+function renderItems() {
+  const container = document.getElementById('project-items');
+  if (project.length === 0) {
+    container.innerHTML = `
+      <div class="empty-project">
+        <div class="empty-icon">📁</div>
+        <h3>No calculations saved yet</h3>
+        <p>Use any calculator below, enter your dimensions,<br/>then click "Save to Project" to add it here.</p>
+        <div class="calc-links">
+          <a href="/concrete-slab-calculator.html" class="calc-link">🧱 Concrete Slab</a>
+          <a href="/concrete-footing-calculator.html" class="calc-link">🔩 Footing</a>
+          <a href="/roofing-calculator.html" class="calc-link">🏠 Roofing</a>
+          <a href="/tile-calculator.html" class="calc-link">🟫 Tile</a>
+          <a href="/gravel-calculator.html" class="calc-link">🪨 Gravel</a>
+          <a href="/mulch-calculator.html" class="calc-link">🌱 Mulch</a>
+          <a href="/paint-calculator.html" class="calc-link">🎨 Paint</a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  container.innerHTML = project.map((item, i) => `
+    <div class="project-item">
+      <div class="item-number">${i + 1}</div>
+      <div class="item-body">
+        <div class="item-name">${item.calculator}</div>
+        <div class="item-date">${item.date}</div>
+        <div class="item-results">
+          ${Object.entries(item.results).map(([k,v]) =>
+            `<div class="item-result-tag">${k}: <span>${v}</span></div>`
+          ).join('')}
+        </div>
+        ${item.inputs ? `<div class="item-results" style="margin-top:4px">
+          ${Object.entries(item.inputs).slice(0,3).map(([k,v]) =>
+            `<div class="item-result-tag" style="opacity:.7">${k}: <span style="color:var(--muted)">${v}</span></div>`
+          ).join('')}
+        </div>` : ''}
+        ${item.remarks ? `<div class="item-remarks">Remarks: ${item.remarks}</div>` : ''}
+      </div>
+      <button class="item-remove" onclick="removeItem(${item.id})" title="Remove">✕</button>
+    </div>
+  `).join('');
+}
+
+// ── REMOVE / CLEAR ────────────────────────────────
+function removeItem(id) {
+  project = project.filter(p => p.id !== id);
+  try { localStorage.setItem('buildprocalc-project', JSON.stringify(project)); } catch(e) {}
+  renderAll();
+  showToast('Removed from project.', '');
+}
+
+function clearProject() {
+  if (project.length === 0) return;
+  if (!confirm('Clear all ' + project.length + ' saved calculations? This cannot be undone.')) return;
+  project = [];
+  try {
+    localStorage.removeItem('buildprocalc-project');
+    localStorage.removeItem('buildprocalc-project-name');
+  } catch(e) {}
+  document.getElementById('project-name').value = '';
+  projectName = '';
+  renderAll();
+  showToast('Project cleared.', '');
+}
+
+// ── PDF ───────────────────────────────────────────
+function downloadProjectPDF() {
+  if (project.length === 0) { showToast('No calculations saved yet.', 'error'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const W = 210, M = 14, CW = W - M*2;
+  const name = projectName || 'My Project';
+
+  // ── COVER PAGE ──────────────────────────────────
+  doc.setFillColor(245, 158, 11);
+  doc.rect(0, 0, W, 32, 'F');
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.text('BuildProCalc.com', M, 13);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Free Construction Calculators  |  buildprocalc.com', M, 22);
+
+  let y = 48;
+  doc.setTextColor(30, 30, 30);
+  doc.setFontSize(20);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Project Report', M, y);
+  y += 10;
+
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(80, 80, 80);
+  doc.text(name, M, y);
+  y += 8;
+
+  doc.setFontSize(9);
+  doc.setTextColor(120, 120, 120);
+  doc.text('Generated: ' + new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}), M, y);
+  doc.text('Total calculations: ' + project.length, M + 100, y);
+  y += 6;
+
+  doc.setDrawColor(245, 158, 11);
+  doc.setLineWidth(0.6);
+  doc.line(M, y, W - M, y);
+  y += 12;
+
+  // Summary table
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(30, 30, 30);
+  doc.text('SUMMARY', M, y);
+  y += 7;
+
+  // Table header
+  doc.setFillColor(245, 158, 11);
+  doc.rect(M, y - 4, CW, 8, 'F');
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(8);
+  doc.text('#', M + 3, y + 1);
+  doc.text('Calculator', M + 12, y + 1);
+  doc.text('Primary Result', M + 90, y + 1);
+  doc.text('Date', M + 145, y + 1);
+  y += 9;
+
+  project.forEach((item, i) => {
+    const bg = i % 2 === 0 ? [248, 248, 248] : [255, 255, 255];
+    doc.setFillColor(...bg);
+    doc.rect(M, y - 4, CW, 8, 'F');
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(60, 60, 60);
+    doc.text(String(i + 1), M + 3, y + 1);
+    doc.text(item.calculator.replace(' Calculator', ''), M + 12, y + 1);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(180, 100, 0);
+    doc.text(Object.values(item.results)[0], M + 90, y + 1);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(120, 120, 120);
+    doc.text(item.date, M + 145, y + 1);
+    y += 8;
+  });
+
+  y += 10;
+
+  // ── DETAIL PAGES ────────────────────────────────
+  project.forEach((item, idx) => {
+    if (y > 240) { doc.addPage(); y = 20; }
+
+    // Section header
+    doc.setFillColor(30, 30, 45);
+    doc.rect(M, y - 4, CW, 13, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(245, 158, 11);
+    doc.text((idx + 1) + '.  ' + item.calculator, M + 4, y + 4);
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text(item.date, W - M - 30, y + 4);
+    y += 18;
+
+    // Two columns: inputs | results
+    const colW = (CW - 6) / 2;
+
+    // Inputs
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(100, 100, 100);
+    doc.text('INPUTS', M, y);
+    doc.text('RESULTS', M + colW + 6, y);
+    y += 5;
+
+    const inputEntries = Object.entries(item.inputs || {});
+    const resultEntries = Object.entries(item.results || {});
+    const maxRows = Math.max(inputEntries.length, resultEntries.length);
+
+    for(let r = 0; r < maxRows; r++) {
+      const rowBg = r % 2 === 0 ? [245, 247, 250] : [255, 255, 255];
+      doc.setFillColor(...rowBg);
+      doc.rect(M, y - 3.5, colW, 7, 'F');
+      doc.rect(M + colW + 6, y - 3.5, colW, 7, 'F');
+
+      if(inputEntries[r]) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 100, 100);
+        doc.text(inputEntries[r][0], M + 2, y + 1);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(30, 30, 30);
+        doc.text(String(inputEntries[r][1]), M + 45, y + 1);
+      }
+
+      if(resultEntries[r]) {
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 100, 100);
+        doc.text(resultEntries[r][0], M + colW + 8, y + 1);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(180, 100, 0);
+        doc.text(String(resultEntries[r][1]), M + colW + 50, y + 1);
+      }
+      y += 7;
+    }
+
+    // Remarks
+    if (item.remarks) {
+      y += 3;
+      doc.setFillColor(252, 252, 252);
+      doc.setDrawColor(200, 200, 200);
+      doc.setLineWidth(0.2);
+      const remarksLines = doc.splitTextToSize('Remarks: ' + item.remarks, CW - 8);
+      const rh = remarksLines.length * 5 + 6;
+      doc.roundedRect(M, y, CW, rh, 1.5, 1.5, 'FD');
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(8);
+      doc.setTextColor(80, 80, 80);
+      doc.text(remarksLines, M + 4, y + 5);
+      y += rh + 6;
+    }
+
+    // Separator
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.2);
+    doc.line(M, y + 2, W - M, y + 2);
+    y += 12;
+  });
+
+  // ── FOOTER ON ALL PAGES ─────────────────────────
+  const pageCount = doc.internal.getNumberOfPages();
+  for(let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setFillColor(245, 158, 11);
+    doc.rect(0, 285, W, 12, 'F');
+    doc.setFontSize(7);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(0, 0, 0);
+    doc.text('BuildProCalc.com — Free Construction Calculators', M, 292);
+    doc.text('Page ' + i + ' of ' + pageCount, W - M - 16, 292);
+  }
+
+  const filename = (projectName || 'project').replace(/[^a-z0-9]/gi, '-').toLowerCase();
+  doc.save('buildprocalc-' + filename + '.pdf');
+  showToast('Project PDF downloaded!', 'success');
+}
+
+// ── EXCEL ─────────────────────────────────────────
+function downloadProjectExcel() {
+  if (project.length === 0) { showToast('No calculations saved yet.', 'error'); return; }
+  const wb = XLSX.utils.book_new();
+  const name = projectName || 'My Project';
+
+  // Summary sheet
+  const summaryData = [
+    ['BuildProCalc.com — Project Report'],
+    ['Project Name:', name],
+    ['Generated:', new Date().toLocaleDateString()],
+    ['Total Calculations:', project.length],
+    [],
+    ['#', 'Calculator', 'Date', 'Primary Result', 'Remarks']
+  ];
+  project.forEach((item, i) => {
+    summaryData.push([
+      i + 1,
+      item.calculator,
+      item.date,
+      Object.values(item.results)[0],
+      item.remarks || ''
+    ]);
+  });
+  summaryData.push([], ['Generated by BuildProCalc.com']);
+
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary['!cols'] = [{wch:4},{wch:28},{wch:14},{wch:24},{wch:40}];
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+  // Individual sheets
+  project.forEach((item, i) => {
+    const sheetData = [
+      [item.calculator],
+      ['Date:', item.date],
+      [],
+      ['INPUT DIMENSIONS'],
+      ...Object.entries(item.inputs || {}).map(([k,v]) => [k, v]),
+      [],
+      ['RESULTS'],
+      ...Object.entries(item.results || {}).map(([k,v]) => [k, v]),
+    ];
+    if(item.tip) sheetData.push([], ['Tip', item.tip]);
+    if(item.remarks) sheetData.push([], ['Remarks', item.remarks]);
+    sheetData.push([], ['BuildProCalc.com']);
+
+    const ws = XLSX.utils.aoa_to_sheet(sheetData);
+    ws['!cols'] = [{wch:25},{wch:35}];
+    const sheetName = (i+1) + '. ' + item.calculator.replace(' Calculator','').substring(0,22);
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+
+  const filename = (projectName || 'project').replace(/[^a-z0-9]/gi, '-').toLowerCase();
+  XLSX.writeFile(wb, 'buildprocalc-' + filename + '.xlsx');
+  showToast('Project Excel downloaded!', 'success');
+}
+
+// ── TOAST ─────────────────────────────────────────
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── INIT ──────────────────────────────────────────
+loadProject();
+</script>
+</body>
+</html>

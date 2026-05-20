@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Gravel Calculator – Cubic Yards & Tons of Stone Needed</title>
   <meta name="description" content="Free gravel calculator. Enter area dimensions and depth to calculate cubic yards or tons of gravel, crushed stone, or sand needed. Instant results, free."/>
-  <link rel="canonical" href="https://yourcalculatorsite.com/gravel-calculator"/>
+  <link rel="canonical" href="https://freecalc247.com/gravel-calculator"/>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Gravel Calculator","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How many cubic yards of gravel do I need?","acceptedAnswer":{"@type":"Answer","text":"Multiply length x width x depth in feet, then divide by 27 to get cubic yards. Our gravel calculator does this instantly."}},{"@type":"Question","name":"How much does a yard of gravel weigh?","acceptedAnswer":{"@type":"Answer","text":"A cubic yard of gravel weighs approximately 2,800 to 3,400 lbs depending on type and moisture content."}},{"@type":"Question","name":"How deep should gravel be for a driveway?","acceptedAnswer":{"@type":"Answer","text":"A gravel driveway should have at least 4 inches of gravel depth, ideally 6 inches for good drainage and stability."}}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -96,11 +96,11 @@ footer a:hover{color:var(--text)}
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="CalcHub"/>
+  <meta name="apple-mobile-web-app-title" content="FreeCalc247"/>
   <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
 </head>
 <body>
-<nav><a href="/index.html" class="logo">Calc<span>Hub</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
+<nav><a href="/index.html" class="logo">Free<span>Calc247</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
 <div class="calc-tabs-wrap"><div class="calc-tabs">
   <a href="/concrete-slab-calculator.html" class="calc-tab">🧱 Concrete Slab</a>
   <a href="/concrete-footing-calculator.html" class="calc-tab">🔩 Footing</a>
@@ -109,6 +109,7 @@ footer a:hover{color:var(--text)}
   <a href="/gravel-calculator.html" class="calc-tab active">🪨 Gravel</a>
   <a href="/mulch-calculator.html" class="calc-tab">🌱 Mulch</a>
   <a href="/paint-calculator.html" class="calc-tab">🎨 Paint</a>
+  <a href="/project.html" class="calc-tab" id="project-tab-link" style="border-left:1px solid var(--border);margin-left:8px;color:#c4b5fd">&#128193; My Project (<span id="project-tab-count">0</span>)</a>
 </div></div>
 <div class="page-title"><h1>Gravel <em>Calculator</em></h1><p>Calculate cubic yards or tons of gravel, crushed stone, or sand for driveways, paths, and landscaping.</p></div>
 <div class="calc-area"><div class="calc-inner">
@@ -171,7 +172,7 @@ footer a:hover{color:var(--text)}
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How deep should gravel be for a driveway?</div><div class="faq-a">A gravel driveway needs at least 4 inches of depth. Ideally use a 6-inch compacted base topped with 2–3 inches of decorative gravel for drainage and stability.</div></div>
   </section>
 </div>
-<footer><p style="margin-bottom:8px">© 2025 CalcHub · Free Online Calculators</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
+<footer><p style="margin-bottom:8px">© 2025 FreeCalc247.com · Free Calculators 24/7</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
 <script>
   function calculate(){
     const l=parseFloat(document.getElementById('len').value);
@@ -200,10 +201,23 @@ footer a:hover{color:var(--text)}
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{
     navigator.serviceWorker.register("/sw.js")
-      .then(r=>console.log("[CalcHub] SW registered"))
-      .catch(e=>console.log("[CalcHub] SW error",e));
+      .then(r=>console.log("[FreeCalc247] SW registered"))
+      .catch(e=>console.log("[FreeCalc247] SW error",e));
   });
 }
 </script>
 
+<script>
+// Update project tab count from localStorage
+try {
+  var _p = localStorage.getItem('buildprocalc-project');
+  var _count = _p ? JSON.parse(_p).length : 0;
+  var _el = document.getElementById('project-tab-count');
+  if(_el) _el.textContent = _count;
+  if(_count > 0) {
+    var _tab = document.getElementById('project-tab-link');
+    if(_tab) { _tab.style.color='#c4b5fd'; _tab.style.borderBottomColor='#8b5cf6'; }
+  }
+} catch(e) {}
+</script>
 </body></html>
