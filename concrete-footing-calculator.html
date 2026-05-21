@@ -4,7 +4,7 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Concrete Footing Calculator – Volume & Bags Needed Free</title>
   <meta name="description" content="Free concrete footing calculator. Calculate cubic yards and bags of concrete needed for round or square footings. Supports multiple footings. Instant results."/>
-  <link rel="canonical" href="https://freecalc247.com/concrete-footing-calculator"/>
+  <link rel="canonical" href="https://buildprocalc.com/concrete-footing-calculator"/>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Concrete Footing Calculator","applicationCategory":"UtilitiesApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I calculate concrete for footings?","acceptedAnswer":{"@type":"Answer","text":"For round footings: volume = pi x radius squared x depth. For square: length x width x depth. Divide by 27 for cubic yards."}},{"@type":"Question","name":"How deep should concrete footings be?","acceptedAnswer":{"@type":"Answer","text":"Footings must extend below the frost line. In warm climates 12 inches minimum. In cold regions up to 60 inches deep."}},{"@type":"Question","name":"How many bags of concrete per footing?","acceptedAnswer":{"@type":"Answer","text":"A 12-inch diameter footing at 36 inches deep needs about 4 bags of 60 lb concrete mix."}}]}</script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -89,6 +89,32 @@ footer{background:var(--surface);border-top:1px solid var(--border);text-align:c
 footer a{color:var(--muted);text-decoration:none;margin:0 9px}
 footer a:hover{color:var(--text)}
 @media(max-width:700px){.calc-inner{grid-template-columns:1fr}.calc-area{position:static}.result-grid{grid-template-columns:repeat(2,1fr)}nav ul{display:none}}
+
+    /* ACTION BUTTONS */
+    .action-buttons{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:10px}
+    .action-btn{padding:9px 6px;border:1px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+    .action-btn:hover{transform:translateY(-2px)}
+    .action-btn .btn-icon{font-size:1.2rem}
+    .action-btn.pdf{border-color:rgba(239,68,68,.3);color:#fca5a5}
+    .action-btn.pdf:hover{background:rgba(239,68,68,.1);border-color:#ef4444}
+    .action-btn.excel{border-color:rgba(34,197,94,.3);color:#86efac}
+    .action-btn.excel:hover{background:rgba(34,197,94,.1);border-color:#22c55e}
+    .action-btn.share{border-color:rgba(59,130,246,.3);color:#93c5fd}
+    .action-btn.share:hover{background:rgba(59,130,246,.1);border-color:#3b82f6}
+    .action-btn.project{border-color:rgba(139,92,246,.3);color:#c4b5fd}
+    .action-btn.project:hover{background:rgba(139,92,246,.1);border-color:#8b5cf6}
+    .action-btn.social{border-color:rgba(245,158,11,.3);color:var(--accent2)}
+    .action-btn.social:hover{background:rgba(245,158,11,.1);border-color:var(--accent)}
+    /* REMARKS */
+    .remarks-section{background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:10px}
+    .remarks-section label{font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:6px;display:block}
+    .remarks-section textarea{background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px;font-size:.82rem;color:var(--text);width:100%;resize:vertical;min-height:55px;font-family:'DM Sans',sans-serif;outline:none}
+    .remarks-section textarea:focus{border-color:var(--accent)}
+    /* TOAST */
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:.85rem;color:var(--text);z-index:9999;transition:transform .3s;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+    .toast.show{transform:translateX(-50%) translateY(0)}
+    .toast.success{border-color:rgba(34,197,94,.4);color:#86efac}
+    .toast.error{border-color:rgba(239,68,68,.4);color:#fca5a5}
   </style>
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json"/>
@@ -96,11 +122,15 @@ footer a:hover{color:var(--text)}
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-  <meta name="apple-mobile-web-app-title" content="FreeCalc247"/>
+  <meta name="apple-mobile-web-app-title" content="BuildProCalc"/>
   <link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+  <!-- jsPDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- SheetJS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </head>
 <body>
-<nav><a href="/index.html" class="logo">Free<span>Calc247</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
+<nav><a href="/index.html" class="logo">BuildPro<span>Calc</span></a><ul><li><a href="/index.html">All Calculators</a></li><li><a href="/about.html">About</a></li></ul></nav>
 <div class="calc-tabs-wrap"><div class="calc-tabs">
   <a href="/concrete-slab-calculator.html" class="calc-tab">🧱 Concrete Slab</a>
   <a href="/concrete-footing-calculator.html" class="calc-tab active">🔩 Footing</a>
@@ -109,7 +139,7 @@ footer a:hover{color:var(--text)}
   <a href="/gravel-calculator.html" class="calc-tab">🪨 Gravel</a>
   <a href="/mulch-calculator.html" class="calc-tab">🌱 Mulch</a>
   <a href="/paint-calculator.html" class="calc-tab">🎨 Paint</a>
-  <a href="/project.html" class="calc-tab" id="project-tab-link" style="border-left:1px solid var(--border);margin-left:8px;color:#c4b5fd">&#128193; My Project (<span id="project-tab-count">0</span>)</a>
+  <a href="/project.html" class="calc-tab project-tab" id="project-tab-link" style="border-left:1px solid var(--border);margin-left:8px;color:#c4b5fd">&#128193; My Project (<span id="project-tab-count">0</span>)</a>
 </div></div>
 <div class="page-title"><h1>Concrete Footing <em>Calculator</em></h1><p>Calculate concrete volume and bags for round tube or square footings. Supports multiple footings at once.</p></div>
 <div class="calc-area"><div class="calc-inner">
@@ -138,6 +168,42 @@ footer a:hover{color:var(--text)}
       </div>
       <div class="tip-box"><span>💡</span><span id="tip-text"></span></div>
     </div>
+
+    
+      <!-- REMARKS — always visible -->
+      <div class="remarks-section" style="margin-top:12px">
+        <label>Remarks (optional — included in your report)</label>
+        <textarea id="remarks" placeholder="e.g. Project at 123 Main St. Estimated cost $500. Date: June 2025."></textarea>
+      </div>
+
+      <!-- ACTION BUTTONS — always visible -->
+      <div class="action-buttons" style="grid-template-columns:repeat(5,1fr)">
+        <button class="action-btn pdf" onclick="downloadPDF()">
+          <span class="btn-icon">📄</span><span>Download PDF</span>
+        </button>
+        <button class="action-btn excel" onclick="downloadExcel()">
+          <span class="btn-icon">📊</span><span>Export Excel</span>
+        </button>
+        <button class="action-btn share" onclick="copyShareLink()">
+          <span class="btn-icon">🔗</span><span>Copy Link</span>
+        </button>
+        <button class="action-btn project" onclick="saveToProject()">
+          <span class="btn-icon">📁</span><span>Save to Project</span>
+        </button>
+        <button class="action-btn social" onclick="openShareMenu()">
+          <span class="btn-icon">📤</span><span>Share</span>
+        </button>
+      </div>
+      <div id="share-menu" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px;font-weight:600">SHARE VIA</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+          <button onclick="shareVia('whatsapp')" style="background:#25D366;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">&#128172;</span>WhatsApp</button>
+          <button onclick="shareVia('facebook')" style="background:#1877F2;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">&#128216;</span>Facebook</button>
+          <button onclick="shareVia('twitter')" style="background:#000;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">&#10006;</span>X/Twitter</button>
+          <button onclick="shareVia('telegram')" style="background:#0088cc;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">&#9992;</span>Telegram</button>
+          <button onclick="shareVia('email')" style="background:#555;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">&#9993;</span>Email</button>
+        </div>
+      </div>
   </div>
 </div></div>
 <div class="below-fold">
@@ -169,8 +235,9 @@ footer a:hover{color:var(--text)}
     <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I mix concrete by hand for footings?</div><div class="faq-a">Yes — for small projects with fewer than 10 footings, hand-mixing bagged concrete is practical. For larger projects, renting a concrete mixer saves significant time and effort.</div></div>
   </section>
 </div>
-<footer><p style="margin-bottom:8px">© 2025 FreeCalc247.com · Free Calculators 24/7</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
+<footer><p style="margin-bottom:8px">© 2025 BuildProCalc.com · Free Construction Calculators</p><div><a href="/privacy-policy.html">Privacy Policy</a><a href="/about.html">About</a><a href="/contact.html">Contact</a></div></footer>
 <script>
+  var lastResult = null;
   let shape='round';
   function setShape(s,btn){
     shape=s;
@@ -206,8 +273,18 @@ footer a:hover{color:var(--text)}
     document.getElementById('res-80lb').textContent=bags80;
     let tip=bags60<=4?'Small project — bagged concrete from a hardware store is perfect.':bags60<=20?'Medium project — consider renting a concrete mixer to save time.':'Large project — ready-mix delivery may be more cost-effective than bags.';
     document.getElementById('tip-text').textContent=tip;
+    // Store result for PDF/Excel/Share
+    lastResult = {
+      calculator: 'Concrete Footing Calculator',
+      date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}),
+      inputs: getInputs(),
+      results: getResults(),
+      tip: document.getElementById('tip-text').textContent
+    };
+    updateProjectTabCount();
     document.getElementById('empty-state').style.display='none';
     document.getElementById('results-content').style.display='block';
+    document.getElementById(\'action-area\').style.display=\'block\';
   }
   function toggleFaq(el){el.parentElement.classList.toggle('open');}
 </script>
@@ -215,8 +292,8 @@ footer a:hover{color:var(--text)}
 if("serviceWorker" in navigator){
   window.addEventListener("load",()=>{
     navigator.serviceWorker.register("/sw.js")
-      .then(r=>console.log("[FreeCalc247] SW registered"))
-      .catch(e=>console.log("[FreeCalc247] SW error",e));
+      .then(r=>console.log("[BuildProCalc] SW registered"))
+      .catch(e=>console.log("[BuildProCalc] SW error",e));
   });
 }
 </script>
@@ -233,5 +310,248 @@ try {
     if(_tab) { _tab.style.color='#c4b5fd'; _tab.style.borderBottomColor='#8b5cf6'; }
   }
 } catch(e) {}
+</script>
+<div class="toast" id="toast"></div>
+
+<div class="toast" id="toast"></div>
+<script>
+// ── TOAST ─────────────────────────────────
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+// ── PDF ───────────────────────────────────
+function downloadPDF() {
+  if (!lastResult) { showToast('Please calculate first!', 'error'); return; }
+  var jsPDF = window.jspdf.jsPDF;
+  var doc = new jsPDF({ unit:'mm', format:'a4' });
+  var W=210, M=14, CW=W-M*2;
+  var r = lastResult;
+  var remarks = document.getElementById('remarks').value.trim();
+
+  // Header
+  doc.setFillColor(245,158,11);
+  doc.rect(0,0,W,26,'F');
+  doc.setTextColor(0,0,0);
+  doc.setFontSize(16); doc.setFont('helvetica','bold');
+  doc.text('BuildProCalc.com', M, 11);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text('Free Construction Calculators  |  buildprocalc.com', M, 20);
+
+  // Title
+  var y = 36;
+  doc.setTextColor(30,30,30);
+  doc.setFontSize(15); doc.setFont('helvetica','bold');
+  doc.text(r.calculator, M, y); y+=7;
+  doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.setTextColor(120,120,120);
+  doc.text('Report generated: ' + r.date, M, y); y+=5;
+  doc.setDrawColor(245,158,11); doc.setLineWidth(0.6);
+  doc.line(M, y, W-M, y); y+=8;
+
+  // Inputs
+  doc.setFontSize(9); doc.setFont('helvetica','bold');
+  doc.setTextColor(80,80,80);
+  doc.text('INPUT DIMENSIONS', M, y); y+=6;
+  Object.entries(r.inputs).forEach(function(entry, i){
+    var key=entry[0], val=entry[1];
+    doc.setFillColor(i%2===0?245:255, i%2===0?247:255, i%2===0?250:255);
+    doc.rect(M,y-4,CW,8,'F');
+    doc.setFont('helvetica','normal'); doc.setFontSize(9); doc.setTextColor(80,80,80);
+    doc.text(key, M+3, y+1);
+    doc.setFont('helvetica','bold'); doc.setTextColor(30,30,30);
+    doc.text(String(val), M+80, y+1);
+    y+=8;
+  });
+  y+=6;
+
+  // Results
+  doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(80,80,80);
+  doc.text('CALCULATION RESULTS', M, y); y+=6;
+  var colW=(CW-4)/2;
+  var entries=Object.entries(r.results);
+  entries.forEach(function(entry, i){
+    var key=entry[0], val=entry[1];
+    var col=i%2, x=M+col*(colW+4);
+    if(col===0 && i>0) y+=20;
+    doc.setDrawColor(245,158,11); doc.setFillColor(255,251,235); doc.setLineWidth(0.4);
+    doc.roundedRect(x,y,colW,16,1.5,1.5,'FD');
+    doc.setFontSize(12); doc.setFont('helvetica','bold'); doc.setTextColor(180,100,0);
+    doc.text(String(val), x+3, y+9);
+    doc.setFontSize(7); doc.setFont('helvetica','normal'); doc.setTextColor(120,100,60);
+    doc.text(key, x+3, y+14);
+  });
+  y+=24;
+
+  // Tip
+  if(r.tip){
+    doc.setFillColor(240,255,245); doc.setDrawColor(34,197,94); doc.setLineWidth(0.4);
+    doc.roundedRect(M,y,CW,12,1.5,1.5,'FD');
+    doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(20,120,60);
+    doc.text('Tip: '+r.tip, M+4, y+8); y+=18;
+  }
+
+  // Remarks
+  if(remarks){
+    doc.setDrawColor(200,200,200); doc.setLineWidth(0.2);
+    doc.line(M,y,W-M,y); y+=8;
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(30,30,30);
+    doc.text('REMARKS / NOTES', M, y); y+=6;
+    var lines=doc.splitTextToSize(remarks, CW-8);
+    var rh=lines.length*5.5+8;
+    doc.setFillColor(250,250,250); doc.setDrawColor(200,200,200);
+    doc.roundedRect(M,y,CW,rh,1.5,1.5,'FD');
+    doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(60,60,60);
+    doc.text(lines, M+4, y+6); y+=rh+8;
+  }
+
+  // Footer
+  doc.setFillColor(245,158,11);
+  doc.rect(0,285,W,12,'F');
+  doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(0,0,0);
+  doc.text('Generated by BuildProCalc.com — Free Construction Calculators', M, 292);
+  doc.text('Page 1', W-M-10, 292);
+
+  var fname = r.calculator.toLowerCase().replace(/[^a-z0-9]/g,'-');
+  doc.save(fname+'.pdf');
+  showToast('PDF downloaded!', 'success');
+}
+
+// ── EXCEL ─────────────────────────────────
+function downloadExcel() {
+  if (!lastResult) { showToast('Please calculate first!', 'error'); return; }
+  var r = lastResult;
+  var remarks = document.getElementById('remarks').value.trim();
+  var wsData = [
+    ['BuildProCalc.com — Free Construction Calculators'],
+    [],
+    [r.calculator],
+    ['Date:', r.date],
+    [],
+    ['INPUT DIMENSIONS'],
+  ];
+  Object.entries(r.inputs).forEach(function(e){ wsData.push([e[0], e[1]]); });
+  wsData.push([]);
+  wsData.push(['RESULTS']);
+  Object.entries(r.results).forEach(function(e){ wsData.push([e[0], e[1]]); });
+  if(r.tip){ wsData.push([]); wsData.push(['Tip', r.tip]); }
+  if(remarks){ wsData.push([]); wsData.push(['Remarks', remarks]); }
+  wsData.push([]); wsData.push(['Generated by BuildProCalc.com']);
+
+  var ws = XLSX.utils.aoa_to_sheet(wsData);
+  ws['!cols'] = [{wch:30},{wch:40}];
+  var wb = XLSX.utils.book_new();
+  var sname = r.calculator.replace(' Calculator','').substring(0,28);
+  XLSX.utils.book_append_sheet(wb, ws, sname);
+  var fname = r.calculator.toLowerCase().replace(/[^a-z0-9]/g,'-');
+  XLSX.writeFile(wb, fname+'.xlsx');
+  showToast('Excel downloaded!', 'success');
+}
+
+// ── SHARE ─────────────────────────────────
+function shareResult() {
+  if (!lastResult) { showToast('Please calculate first!', 'error'); return; }
+  var shareUrl = 'https://buildprocalc.com' + window.location.pathname;
+  try { shareUrl = window.location.href; } catch(e){}
+
+  // Try native share (mobile)
+  if (navigator.share) {
+    navigator.share({
+      title: lastResult.calculator + ' — BuildProCalc',
+      text: 'Check out my ' + lastResult.calculator + ' results on BuildProCalc!',
+      url: shareUrl
+    }).then(function(){
+      showToast('Shared!', 'success');
+    }).catch(function(){
+      copyToClipboard(shareUrl);
+    });
+  } else {
+    // Desktop: show share options
+    showShareMenu(shareUrl);
+  }
+}
+
+function showShareMenu(url) {
+  var existing = document.getElementById('share-menu');
+  if(existing) existing.remove();
+
+  var encoded = encodeURIComponent(url);
+  var text = encodeURIComponent('Check my ' + lastResult.calculator + ' results on BuildProCalc!');
+
+  var menu = document.createElement('div');
+  menu.id = 'share-menu';
+  menu.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1d27;border:1px solid #2e3347;border-radius:14px;padding:16px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:280px';
+  menu.innerHTML =
+    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:.85rem;color:#f0f0f0;margin-bottom:12px">Share your results</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
+    '<a href="https://wa.me/?text='+text+'%20'+encoded+'" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#25d366;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#128241; WhatsApp</a>' +
+    '<a href="https://t.me/share/url?url='+encoded+'&text='+text+'" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#229ed9;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#9992; Telegram</a>' +
+    '<a href="https://www.facebook.com/sharer/sharer.php?u='+encoded+'" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#128;f Facebook</a>' +
+    '<a href="mailto:?subject='+encodeURIComponent(lastResult.calculator)+' Results&body='+text+'%20'+encoded+'" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#374151;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#9993; Email</a>' +
+    '<button onclick="copyToClipboard(''+url+'')" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#374151;color:#fff;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;font-family:DM Sans,sans-serif">&#128279; Copy Link</button>' +
+    '<button onclick="document.getElementById('share-menu').remove()" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#22263a;color:#8b90a7;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid #2e3347;font-family:DM Sans,sans-serif">&#10005; Close</button>' +
+    '</div>';
+  document.body.appendChild(menu);
+}
+
+function copyToClipboard(text) {
+  if(document.getElementById('share-menu')) document.getElementById('share-menu').remove();
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){ showToast('Link copied!', 'success'); });
+  } else {
+    var el=document.createElement('textarea');
+    el.value=text; el.style.position='fixed'; el.style.opacity='0';
+    document.body.appendChild(el); el.select();
+    document.execCommand('copy'); document.body.removeChild(el);
+    showToast('Link copied!', 'success');
+  }
+}
+
+// ── SAVE TO PROJECT ───────────────────────
+function saveToProject() {
+  if (!lastResult) { showToast('Please calculate first!', 'error'); return; }
+  var remarks = document.getElementById('remarks').value.trim();
+  var item = Object.assign({ id: Date.now(), remarks: remarks }, lastResult);
+  var project = [];
+  try {
+    var saved = localStorage.getItem('buildprocalc-project');
+    if(saved) project = JSON.parse(saved);
+  } catch(e){}
+  project.push(item);
+  try { localStorage.setItem('buildprocalc-project', JSON.stringify(project)); } catch(e){}
+  // Update tab count
+  var el = document.getElementById('project-tab-count');
+  if(el) el.textContent = project.length;
+  var tab = document.getElementById('project-tab-link');
+  if(tab){ tab.style.color='#c4b5fd'; tab.style.borderBottomColor='#8b5cf6'; }
+  showToast('Saved! Click My Project tab to view all.', 'success');
+}
+
+// ── URL PARAMS ────────────────────────────
+function updateShareUrl(params) {
+  try {
+    var url = new URL(window.location.href);
+    Object.entries(params).forEach(function(e){ url.searchParams.set(e[0], e[1]); });
+    window.history.replaceState({}, '', url);
+  } catch(e){}
+}
+
+// ── PROJECT TAB COUNT ─────────────────────
+window.addEventListener('load', function(){
+  try {
+    var saved = localStorage.getItem('buildprocalc-project');
+    var count = saved ? JSON.parse(saved).length : 0;
+    var el = document.getElementById('project-tab-count');
+    if(el) el.textContent = count;
+    if(count > 0){
+      var tab = document.getElementById('project-tab-link');
+      if(tab){ tab.style.color='#c4b5fd'; tab.style.borderBottomColor='#8b5cf6'; }
+    }
+  } catch(e){}
+});
 </script>
 </body></html>

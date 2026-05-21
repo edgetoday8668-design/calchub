@@ -61,7 +61,7 @@
     .result-primary{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:14px;text-align:center;margin-bottom:11px}
     .result-primary .big{font-family:'Sora',sans-serif;font-size:2.2rem;font-weight:800;color:var(--accent);line-height:1}
     .result-primary .rl{color:var(--muted);font-size:.78rem;margin-top:3px}
-    .result-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:11px}
+    .result-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:11px}
     .result-item{background:var(--surface2);border-radius:7px;padding:9px;text-align:center}
     .result-item .val{font-family:'Sora',sans-serif;font-weight:700;font-size:.95rem;color:var(--text)}
     .result-item .lbl{font-size:.68rem;color:var(--muted);margin-top:2px}
@@ -74,7 +74,7 @@
     .remarks-section textarea:focus{border-color:var(--accent)}
 
     /* ACTION BUTTONS */
-    .action-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+    .action-buttons{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
     .action-btn{padding:9px 6px;border:1px solid var(--border);border-radius:9px;background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
     .action-btn:hover{transform:translateY(-2px)}
     .action-btn .btn-icon{font-size:1.2rem}
@@ -87,6 +87,9 @@
     .action-btn.project{border-color:rgba(139,92,246,.3);color:#c4b5fd}
     .action-btn.project:hover{background:rgba(139,92,246,.1);border-color:#8b5cf6}
 
+    /* SOCIAL */
+    .action-btn.social{border-color:rgba(245,158,11,.3);color:var(--accent2)}
+    .action-btn.social:hover{background:rgba(245,158,11,.1);border-color:var(--accent)}
     /* TOAST */
     .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:.85rem;color:var(--text);z-index:9999;transition:transform .3s;box-shadow:0 8px 32px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px}
     .toast.show{transform:translateX(-50%) translateY(0)}
@@ -182,33 +185,48 @@
           <div class="result-item"><div class="val" id="res-80lb">—</div><div class="lbl">80 lb bags</div></div>
         </div>
         <div class="tip-box"><span>💡</span><span id="tip-text"></span></div>
+      </div>
 
-        <!-- REMARKS -->
-        <div class="remarks-section">
-          <label>📝 Remarks (optional — included in your report)</label>
-          <textarea id="remarks" placeholder="e.g. Driveway project at 123 Main St. Estimated cost $850. Pour date: June 2025."></textarea>
+      <!-- REMARKS — always visible -->
+      <div class="remarks-section" style="margin-top:12px">
+        <label>Remarks (optional — included in your report)</label>
+        <textarea id="remarks" placeholder="e.g. Driveway project at 123 Main St. Estimated cost $850. Pour date: June 2025."></textarea>
+      </div>
+
+      <!-- ACTION BUTTONS — always visible -->
+      <div class="action-buttons">
+        <button class="action-btn pdf" onclick="downloadPDF()">
+          <span class="btn-icon">📄</span>
+          <span>Download PDF</span>
+        </button>
+        <button class="action-btn excel" onclick="downloadExcel()">
+          <span class="btn-icon">📊</span>
+          <span>Export Excel</span>
+        </button>
+        <button class="action-btn share" onclick="copyShareLink()">
+          <span class="btn-icon">🔗</span>
+          <span>Copy Link</span>
+        </button>
+        <button class="action-btn project" onclick="saveToProject()">
+          <span class="btn-icon">📁</span>
+          <span>Save to Project</span>
+        </button>
+        <button class="action-btn social" onclick="openShareMenu()">
+          <span class="btn-icon">📤</span>
+          <span>Share</span>
+        </button>
+      </div>
+
+      <!-- SOCIAL SHARE MENU -->
+      <div id="share-menu" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
+        <div style="font-size:.75rem;color:var(--muted);margin-bottom:8px;font-weight:600">SHARE VIA</div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px">
+          <button onclick="shareVia('whatsapp')" style="background:#25D366;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">💬</span>WhatsApp</button>
+          <button onclick="shareVia('facebook')" style="background:#1877F2;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">📘</span>Facebook</button>
+          <button onclick="shareVia('twitter')" style="background:#000;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">✖</span>X / Twitter</button>
+          <button onclick="shareVia('telegram')" style="background:#0088cc;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">✈</span>Telegram</button>
+          <button onclick="shareVia('email')" style="background:#555;border:none;border-radius:8px;padding:8px 4px;cursor:pointer;color:#fff;font-size:.7rem;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:3px"><span style="font-size:1.2rem">✉</span>Email</button>
         </div>
-
-        <!-- ACTION BUTTONS -->
-        <div class="action-buttons">
-          <button class="action-btn pdf" onclick="downloadPDF()">
-            <span class="btn-icon">📄</span>
-            <span>Download PDF</span>
-          </button>
-          <button class="action-btn excel" onclick="downloadExcel()">
-            <span class="btn-icon">📊</span>
-            <span>Export Excel</span>
-          </button>
-          <button class="action-btn share" onclick="copyShareLink()">
-            <span class="btn-icon">🔗</span>
-            <span>Copy Link</span>
-          </button>
-          <button class="action-btn project" onclick="saveToProject()">
-            <span class="btn-icon">📁</span>
-            <span>Save to Project</span>
-          </button>
-        </div>
-
       </div>
     </div>
   </div>
@@ -828,6 +846,37 @@ function downloadProjectExcel() {
 
   XLSX.writeFile(wb, 'buildprocalc-project-report.xlsx');
   showToast('📊 Project Excel downloaded!', 'success');
+}
+
+// ─── SOCIAL SHARE ────────────────────────────────
+function openShareMenu() {
+  const menu = document.getElementById('share-menu');
+  menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+}
+
+function shareVia(platform) {
+  let shareUrl = 'https://buildprocalc.com/concrete-slab-calculator';
+  try { shareUrl = window.location.href; } catch(e) {}
+  const remarks = document.getElementById('remarks').value.trim();
+  const hasResult = document.getElementById('results-content').style.display !== 'none';
+  const resultText = hasResult ? document.getElementById('res-yards').textContent + ' cubic yards needed' : '';
+  const msg = 'Check out this free Concrete Slab Calculator!' +
+    (resultText ? ' My result: ' + resultText + '.' : '') +
+    (remarks ? ' ' + remarks : '') +
+    ' Calculate yours at: ' + shareUrl;
+
+  const urls = {
+    whatsapp: 'https://wa.me/?text=' + encodeURIComponent(msg),
+    facebook: 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(shareUrl) + '&quote=' + encodeURIComponent(msg),
+    twitter:  'https://twitter.com/intent/tweet?text=' + encodeURIComponent(msg),
+    telegram: 'https://t.me/share/url?url=' + encodeURIComponent(shareUrl) + '&text=' + encodeURIComponent(msg),
+    email:    'mailto:?subject=Concrete Slab Calculator Result&body=' + encodeURIComponent(msg)
+  };
+
+  if (urls[platform]) {
+    window.open(urls[platform], '_blank');
+    document.getElementById('share-menu').style.display = 'none';
+  }
 }
 
 // ─── FAQ ──────────────────────────────────────────
