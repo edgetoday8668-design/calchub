@@ -282,7 +282,7 @@ footer a:hover{color:var(--text)}
     updateProjectTabCount();
     document.getElementById('empty-state').style.display='none';
     document.getElementById('results-content').style.display='block';
-    document.getElementById(\'action-area\').style.display=\'block\';
+    document.getElementById('action-area').style.display='block';
   }
   function toggleFaq(el){el.parentElement.classList.toggle('open');}
 </script>
@@ -476,24 +476,59 @@ function shareResult() {
 function showShareMenu(url) {
   var existing = document.getElementById('share-menu');
   if(existing) existing.remove();
-
   var encoded = encodeURIComponent(url);
-  var text = encodeURIComponent('Check my ' + lastResult.calculator + ' results on BuildProCalc!');
-
+  var title = lastResult ? lastResult.calculator : 'BuildProCalc';
+  var text = encodeURIComponent('Check my ' + title + ' results on BuildProCalc!');
   var menu = document.createElement('div');
   menu.id = 'share-menu';
-  menu.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1d27;border:1px solid #2e3347;border-radius:14px;padding:16px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:280px';
-  menu.innerHTML =
-    '<div style="font-family:Sora,sans-serif;font-weight:700;font-size:.85rem;color:#f0f0f0;margin-bottom:12px">Share your results</div>' +
-    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">' +
-    '<a href="https://wa.me/?text='+text+'%20'+encoded+'" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#25d366;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#128241; WhatsApp</a>' +
-    '<a href="https://t.me/share/url?url='+encoded+'&text='+text+'" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#229ed9;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#9992; Telegram</a>' +
-    '<a href="https://www.facebook.com/sharer/sharer.php?u='+encoded+'" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#1877f2;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#128;f Facebook</a>' +
-    '<a href="mailto:?subject='+encodeURIComponent(lastResult.calculator)+' Results&body='+text+'%20'+encoded+'" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#374151;color:#fff;border-radius:8px;text-decoration:none;font-size:.8rem;font-weight:600">&#9993; Email</a>' +
-    '<button onclick="copyToClipboard(''+url+'')" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#374151;color:#fff;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;font-family:DM Sans,sans-serif">&#128279; Copy Link</button>' +
-    '<button onclick="document.getElementById('share-menu').remove()" style="display:flex;align-items:center;gap:8px;padding:10px 12px;background:#22263a;color:#8b90a7;border-radius:8px;font-size:.8rem;font-weight:600;cursor:pointer;border:1px solid #2e3347;font-family:DM Sans,sans-serif">&#10005; Close</button>' +
-    '</div>';
+  menu.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1d27;border:1px solid #2e3347;border-radius:14px;padding:16px;z-index:9999;box-shadow:0 8px 32px rgba(0,0,0,.5);min-width:280px;max-width:90vw';
+
+  var titleDiv = document.createElement('div');
+  titleDiv.style.cssText = 'font-family:Sora,sans-serif;font-weight:700;font-size:.85rem;color:#f0f0f0;margin-bottom:12px';
+  titleDiv.textContent = 'Share your results';
+  menu.appendChild(titleDiv);
+
+  var grid = document.createElement('div');
+  grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:8px';
+
+  var links = [
+    { label:'WhatsApp', bg:'#25d366', href:'https://wa.me/?text='+text+'%20'+encoded },
+    { label:'Telegram', bg:'#229ed9', href:'https://t.me/share/url?url='+encoded+'&text='+text },
+    { label:'Facebook', bg:'#1877f2', href:'https://www.facebook.com/sharer/sharer.php?u='+encoded },
+    { label:'Email', bg:'#374151', href:'mailto:?subject='+encodeURIComponent(title)+' Results&body='+text+'%20'+encoded },
+  ];
+
+  links.forEach(function(l) {
+    var a = document.createElement('a');
+    a.href = l.href;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:10px 12px;background:'+l.bg+';color:#fff;border-radius:8px;text-decoration:none;font-size:.82rem;font-weight:600;font-family:DM Sans,sans-serif';
+    a.textContent = l.label;
+    grid.appendChild(a);
+  });
+
+  var copyBtn = document.createElement('button');
+  copyBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:10px 12px;background:#374151;color:#fff;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;font-family:DM Sans,sans-serif';
+  copyBtn.textContent = 'Copy Link';
+  copyBtn.onclick = function(){ copyToClipboard(url); };
+  grid.appendChild(copyBtn);
+
+  var closeBtn = document.createElement('button');
+  closeBtn.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:10px 12px;background:#22263a;color:#8b90a7;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:1px solid #2e3347;font-family:DM Sans,sans-serif';
+  closeBtn.textContent = 'Close';
+  closeBtn.onclick = function(){ menu.remove(); };
+  grid.appendChild(closeBtn);
+
+  menu.appendChild(grid);
   document.body.appendChild(menu);
+
+  // Close on outside click
+  setTimeout(function(){
+    document.addEventListener('click', function handler(e){
+      if(!menu.contains(e.target)){ menu.remove(); document.removeEventListener('click', handler); }
+    });
+  }, 100);
 }
 
 function copyToClipboard(text) {
